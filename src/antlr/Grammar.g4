@@ -5,11 +5,13 @@ program: (declaration | function)* ;
 
 // declaration (constants, global and local variables)
 // nasobne prirazeni, paralelni prirazeni
-declaration: CONST? type IDENTIFIER assignment? (COMMA IDENTIFIER assignment?)* SEMICOLON |
-CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL LEFT_COMPOUND_PARENTHESIS value SEMICOLON ;
+declaration: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment? SEMICOLON |
+CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL LEFT_COMPOUND_PARENTHESIS value+
+RIGHT_COMPOUND_PARENTHESIS SEMICOLON ;
 
 // function
-function: type IDENTIFIER  LEFT_ROUND_PARENTHESIS (type IDENTIFIER COMMA?)* RIGHT_ROUND_PARENTHESIS statement ;
+function: type IDENTIFIER  LEFT_ROUND_PARENTHESIS (parameter)* RIGHT_ROUND_PARENTHESIS statement ;
+parameter: type IDENTIFIER COMMA? ;
 
 // statement
 statement: LEFT_COMPOUND_PARENTHESIS statement_body+ RIGHT_COMPOUND_PARENTHESIS ;
@@ -19,7 +21,7 @@ statement_body: declaration | cycle | conditional | function_call SEMICOLON ;
 // identifier (variable/function name)
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]* ;
 
-assignment: EQUAL expression SEMICOLON ;
+assignment: EQUAL expression ;
 
 // TODO boolean, real, string, array, function name ...
 
@@ -66,7 +68,7 @@ for_declaration: declaration; /* TODO paralelni nemuze atd. */
 function_call: IDENTIFIER  LEFT_ROUND_PARENTHESIS (IDENTIFIER COMMA?)* RIGHT_ROUND_PARENTHESIS ;
 
 // type
-type: 'int' | 'real' | 'ratio' | 'boolean' | 'string' | array_type ;
+type: 'void' | 'int' | 'real' | 'ratio' | 'boolean' | 'string' | array_type ;
 // data type
 INT: [0-9]+ ;
 //INT: [1-9][0-9]* | 0;
@@ -116,4 +118,5 @@ DOUBLE_DOT: ':' ;
 COMMA: ',' ;
 SEMICOLON: ';' ;
 BREAK: 'break' ;
+SPACE: [ \n\t\r]+ -> skip ;
 

@@ -1,4 +1,5 @@
 // Generated from java-escape by ANTLR 4.11.1
+package antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -36,6 +37,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunction(GrammarParser.FunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameter(GrammarParser.ParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameter(GrammarParser.ParameterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#statement}.
 	 * @param ctx the parse tree
