@@ -1,0 +1,15 @@
+void main() {
+
+    int limit = 5;
+    int i = 0;
+
+    int calc = 0;
+
+    while(i < limit) {
+        i = i + 1;
+
+        calc = calc + 3;
+    }
+
+    return;
+}

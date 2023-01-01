@@ -1,0 +1,8 @@
+void main() {
+
+    int a = 4;
+    bool b = true;
+    int c = b;
+
+    return;
+}

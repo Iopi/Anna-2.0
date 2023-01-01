@@ -1,0 +1,19 @@
+void main() {
+
+    int target = 2;
+    int val = 5;
+
+    switch(target) {
+        case 0:
+            val = 0;
+            break;
+        case 1:
+            val = 1;
+            break;
+        case 2:
+            val = 2;
+            break;
+    }
+
+    return;
+}

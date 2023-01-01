@@ -1,0 +1,14 @@
+void main() {
+
+    boolean a = true;
+    boolean b = a;
+
+    boolean c = true;
+
+    int val = 5;
+    if(a == c) {
+        val = 10;
+    }
+
+    return;
+}
