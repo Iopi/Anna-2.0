@@ -1,15 +1,19 @@
 import antlr.GrammarLexer;
 import antlr.GrammarParser;
 
+import instruction.InstructionGenerator;
+import tree.Node;
+import tree.Program;
+import visitor.GrammarVisitor;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 
 public class Main {
@@ -31,16 +35,25 @@ public class Main {
         GrammarParser parser = new GrammarParser(tokens);
         ParseTree tree = parser.program();
 
-        // TODO GrammarVisitor
+        // TODO visitor.GrammarVisitor
 
-        String instructions = "INT 0 0";
-        instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructions);
+        Program program = new GrammarVisitor().visit(tree);
+        InstructionGenerator insGenerator = new InstructionGenerator(program);
+        ArrayList<String> instructionList = insGenerator.generateInstructions();
+        instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructionList);
+
+
+//        String instructions = "INT 0 0";
+//        instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructions);
 
     }
 
-    private static void instructionToOutput(String fileName, String instructions) {
+    private static void instructionToOutput(String fileName, ArrayList<String> instructions) {
         try (PrintWriter out = new PrintWriter(fileName)) {
-            out.println(instructions);
+            for (String instruction : instructions) {
+                out.println(instruction);
+            }
+//            out.println(instructions);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
