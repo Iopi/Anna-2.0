@@ -7,7 +7,7 @@ program: (declaration | function)* ;
 // nasobne prirazeni, paralelni prirazeni
 declaration: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment? SEMICOLON | // int a = b = c = 15 ;
 CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL LEFT_COMPOUND_PARENTHESIS value+
-RIGHT_COMPOUND_PARENTHESIS SEMICOLON ; // int (a b c) = (4 2 3)
+RIGHT_COMPOUND_PARENTHESIS SEMICOLON ; // int {a b c} = {4 2 3}
 
 // function
 function: type IDENTIFIER  LEFT_ROUND_PARENTHESIS (parameter)* RIGHT_ROUND_PARENTHESIS statement ;
@@ -26,7 +26,7 @@ assignment: EQUAL expression ;
 // TODO boolean, real, string, array, function name ...
 
 // expression
-expression: MINUS? INT | MINUS? REAL | BOOLEAN |
+expression: MINUS? INT | MINUS? REAL | BOOLEAN | function_call |
           | LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
           | expression op=(MULT | DIVISION) expression
           | expression op=(PLUS | MINUS) expression

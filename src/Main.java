@@ -35,16 +35,10 @@ public class Main {
         GrammarParser parser = new GrammarParser(tokens);
         ParseTree tree = parser.program();
 
-        // TODO visitor.GrammarVisitor
-
         Program program = new GrammarVisitor().visit(tree);
         InstructionGenerator insGenerator = new InstructionGenerator(program);
         ArrayList<String> instructionList = insGenerator.generateInstructions();
         instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructionList);
-
-
-//        String instructions = "INT 0 0";
-//        instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructions);
 
     }
 

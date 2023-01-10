@@ -2,15 +2,14 @@ package visitor;
 
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
-import tree.Node;
-import tree.SingleDeclaration;
+import tree.Variable;
 
 import java.util.List;
 
-public class DeclarationVisitor extends GrammarBaseVisitor<List<SingleDeclaration>> {
+public class DeclarationVisitor extends GrammarBaseVisitor<List<Variable>> {
 
     @Override
-    public List<SingleDeclaration> visitDeclaration(GrammarParser.DeclarationContext ctx) {
+    public List<Variable> visitDeclaration(GrammarParser.DeclarationContext ctx) {
 
         return super.visitDeclaration(ctx);
     }
