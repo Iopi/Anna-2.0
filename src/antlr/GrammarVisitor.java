@@ -17,11 +17,29 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(GrammarParser.ProgramContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link GrammarParser#main}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMain(GrammarParser.MainContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link GrammarParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDeclaration(GrammarParser.DeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#inicialization}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInicialization(GrammarParser.InicializationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#right_side}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRight_side(GrammarParser.Right_sideContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link GrammarParser#function}.
 	 * @param ctx the parse tree

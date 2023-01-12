@@ -11,38 +11,51 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
 
     @Override
     public Program visitProgram(GrammarParser.ProgramContext ctx) {
-        List<Variable> declarations = getVariables(ctx.declaration());
-        List<Function> functions = getFunction(ctx.function());
+        List<Function> functions = getFunction(ctx.main());
+        AllVariables vars = getVariables(ctx.main());
 
-        return new Program(declarations, functions);
+        return new Program(vars.getVariables(), functions, vars.getIniVariables());
     }
 
-    private List<Variable> getVariables(List<GrammarParser.DeclarationContext> declarationsCtx) {
-        List<Variable> variables = new ArrayList<>();
+    private AllVariables getVariables(List<GrammarParser.MainContext> mainsCtx) {
+        AllVariables vars = new AllVariables();
         List<Variable> separated_declarations;
+        List<InicialVariable> inicializationStrings;
 
-        for (GrammarParser.DeclarationContext declarationCtx : declarationsCtx) {
-            separated_declarations = new DeclarationVisitor().visit(declarationCtx);
+        for (GrammarParser.MainContext mainCtx : mainsCtx) {
+            if (mainCtx.declaration() != null) {
+                separated_declarations = new DeclarationVisitor().visit(mainCtx.declaration());
 
-            for (Variable separated_declaration : separated_declarations) {
-                for (Variable declaration : variables)
-                    if (separated_declaration.getName().equals(declaration.getName()))
-                        throw new RuntimeException("Variable " + separated_declaration.getName() + " already exists.");
+                for (Variable separated_declaration : separated_declarations) {
+                    for (Variable declaration : vars.getVariables())
+                        if (separated_declaration.getName().equals(declaration.getName()))
+                            throw new RuntimeException("Variable " + separated_declaration.getName() + " already exists.");
 
-                variables.add(separated_declaration);
+                    vars.getVariables().add(separated_declaration);
+                }
             }
+            else if (mainCtx.inicialization() != null) {
+                inicializationStrings = new InicializationVisitor().visit(mainCtx.inicialization());
 
+                for (InicialVariable new_var : inicializationStrings) {
+                    for (Variable declaration : vars.getVariables())
+                        if (!new_var.getName().equals(declaration.getName()))
+                            throw new RuntimeException("Variable " + new_var.getName() + " not exists.");
+
+                    vars.getIniVariables().add(new_var);
+                }
+            }
         }
 
-        return variables;
+        return vars;
     }
 
-    private List<Function> getFunction(List<GrammarParser.FunctionContext> functionsCtx) {
+    private List<Function> getFunction(List<GrammarParser.MainContext> mainsCtx) {
         List<Function> functions = new ArrayList<>();
         Function new_function;
 
-        for (GrammarParser.FunctionContext functionCtx : functionsCtx) {
-            new_function = new FunctionVisitor().visit(functionCtx);
+        for (GrammarParser.MainContext mainCtx : mainsCtx) {
+            new_function = new FunctionVisitor().visit(mainCtx.function());
 
             for (Function function : functions)
                 if (new_function.getName().equals(function.getName()))

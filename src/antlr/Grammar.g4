@@ -1,7 +1,10 @@
 grammar Grammar;
 
 // program
-program: (declaration | function)* ;
+program: (main)* ;
+
+// main
+main: declaration | inicialization | function ;
 
 // declaration (constants, global and local variables)
 // nasobne prirazeni, paralelni prirazeni
@@ -9,14 +12,19 @@ declaration: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment? SEMICOLON | 
 CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL LEFT_COMPOUND_PARENTHESIS value+
 RIGHT_COMPOUND_PARENTHESIS SEMICOLON ; // int {a b c} = {4 2 3}
 
+// inicialization a = 5;
+inicialization: IDENTIFIER right_side SEMICOLON ;
+right_side: assignment | IDENTIFIER; // chce to lepsi nazev
+
 // function
-function: type IDENTIFIER  LEFT_ROUND_PARENTHESIS (parameter)* RIGHT_ROUND_PARENTHESIS statement ;
+function: FUNC IDENTIFIER  LEFT_ROUND_PARENTHESIS (parameter)* RIGHT_ROUND_PARENTHESIS statement ;
 parameter: type IDENTIFIER COMMA? ;
+FUNC: 'function';
 
 // statement
 statement: LEFT_COMPOUND_PARENTHESIS statement_body+ RIGHT_COMPOUND_PARENTHESIS ;
 
-statement_body: declaration | cycle | conditional | function_call SEMICOLON ;
+statement_body: declaration | inicialization | cycle | conditional | function_call SEMICOLON ;
 
 // identifier (variable/function name)
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]* ;

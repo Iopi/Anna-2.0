@@ -14,7 +14,6 @@ public class StatementVisitor extends GrammarBaseVisitor<Statement> {
 
     @Override
     public Statement visitStatement(GrammarParser.StatementContext ctx) {
-        StatementBody sb = StatementBodyVisitor().visit(ctx.statement_body());
         return getStatementBodies(ctx.statement_body());
     }
 
@@ -32,20 +31,18 @@ public class StatementVisitor extends GrammarBaseVisitor<Statement> {
                     statement.getVariables().add(new_var);
                 }
             }
-            else if (statementBodyCtx.cycle() != null) {
-                Cycle cycle = new CycleVisitor().visit(statementBodyCtx.cycle());
-            } else if (statementBodyCtx.conditional() != null) {
-                Conditional cond = new ConditionalVisitor().visit(statementBodyCtx.conditional());
-            } else if (statementBodyCtx.function_call() != null) {
-                for (TerminalNode ident : statementBodyCtx.function_call().IDENTIFIER()) {
-                    for ( : ) {
+//            else if (statementBodyCtx.cycle() != null) {
+//                Cycle cycle = new CycleVisitor().visit(statementBodyCtx.cycle());
+//            } else if (statementBodyCtx.conditional() != null) {
+//                Conditional cond = new ConditionalVisitor().visit(statementBodyCtx.conditional());
+//            }
+            else if (statementBodyCtx.function_call() != null) {
+                String funcName = statementBodyCtx.function_call().IDENTIFIER().get(0).getText();
+                statement.getIniFunctions().add(funcName);
 
-                    }
-                    if (ident.getText().equals())
-                }
-                String funcName = statementBodyCtx.function_call().IDENTIFIER();
-                String funcName = statementBodyCtx.function_call();
-                var funcCall = new FunctionCallVisitor().visit(statementBodyCtx.function_call());
+                for (int i = 1; i < statementBodyCtx.function_call().IDENTIFIER().size(); i++)
+                    statement.getIniVariables().add(statementBodyCtx.function_call().IDENTIFIER().get(i).getText());
+
             }
         }
         return statement;

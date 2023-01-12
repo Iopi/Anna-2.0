@@ -18,6 +18,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitProgram(GrammarParser.ProgramContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GrammarParser#main}.
+	 * @param ctx the parse tree
+	 */
+	void enterMain(GrammarParser.MainContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#main}.
+	 * @param ctx the parse tree
+	 */
+	void exitMain(GrammarParser.MainContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammarParser#declaration}.
 	 * @param ctx the parse tree
 	 */
@@ -27,6 +37,26 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDeclaration(GrammarParser.DeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#inicialization}.
+	 * @param ctx the parse tree
+	 */
+	void enterInicialization(GrammarParser.InicializationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#inicialization}.
+	 * @param ctx the parse tree
+	 */
+	void exitInicialization(GrammarParser.InicializationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#right_side}.
+	 * @param ctx the parse tree
+	 */
+	void enterRight_side(GrammarParser.Right_sideContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#right_side}.
+	 * @param ctx the parse tree
+	 */
+	void exitRight_side(GrammarParser.Right_sideContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#function}.
 	 * @param ctx the parse tree

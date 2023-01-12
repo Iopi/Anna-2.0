@@ -2,6 +2,7 @@ package visitor;
 
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
+import tree.Cycle;
 import tree.Statement;
 
 public class CycleVisitor extends GrammarBaseVisitor<Cycle> {

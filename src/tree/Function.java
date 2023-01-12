@@ -11,16 +11,16 @@ import java.util.List;
 @AllArgsConstructor
 public class Function extends Symbol {
 
-    private DataType type;
+//    private DataType type;
 
     HashMap<String, Symbol> symbolTable;
 
-    public Function(DataType type, String ident, List<Variable> parameters, Statement statement) {
+    public Function(/*DataType type, */String ident, List<Variable> parameters) {
         super();
         setName(ident);
-        this.type = type;
+//        this.type = type;
         this.symbolTable = new HashMap<>();
         for (Symbol symbol : parameters) symbolTable.put(symbol.getName(), symbol);
-        // TODO statement
+
     }
 }

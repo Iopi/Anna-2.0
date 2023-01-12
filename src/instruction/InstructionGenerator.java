@@ -1,6 +1,5 @@
 package instruction;
 
-import tree.Node;
 import tree.Program;
 
 import java.util.ArrayList;

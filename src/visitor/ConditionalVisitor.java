@@ -2,11 +2,13 @@ package visitor;
 
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
+import tree.Conditional;
 
 public class ConditionalVisitor extends GrammarBaseVisitor<Conditional> {
 
     @Override
-    public Conditional visitCycle(GrammarParser.ConditionalContext ctx) {
+    public Conditional visitConditional(GrammarParser.ConditionalContext ctx) {
+
         return new Conditional();
     }
 }

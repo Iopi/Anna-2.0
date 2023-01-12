@@ -16,16 +16,24 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
 
     @Override
     public Function visitFunction(GrammarParser.FunctionContext ctx) {
-        //function: type IDENTIFIER  LEFT_ROUND_PARENTHESIS (parameter)* RIGHT_ROUND_PARENTHESIS statement ;
-        DataType type = DataType.getType(ctx.type().getText());
+//        DataType type = DataType.getType(ctx.type().getText());
         String ident = ctx.IDENTIFIER().getText();
-//        String paraLR = ctx.LEFT_ROUND_PARENTHESIS().getText();
         List<Variable> parameters = getParameters(ctx.parameter());
-//        String paraRR = ctx.RIGHT_ROUND_PARENTHESIS().getText();
-        List<StatementBody> statementBodies = new StatementVisitor().visit(ctx.statement());
+        Statement statement = new StatementVisitor().visit(ctx.statement());
+        List<Variable> variables = identControl(parameters, statement);
 
-        return new Function(type, ident, parameters, statement);
+        return new Function(ident, variables);
 
+    }
+
+    private List<Variable> identControl(List<Variable> variables, Statement statement) {
+        for (Variable new_var : statement.getVariables()) {
+            for (Variable var : variables)
+                if (var.getName().equals(new_var.getName()))
+                    throw new RuntimeException("Variable " + new_var + " already exist in function.");
+            variables.add(new_var);
+        }
+        return variables;
     }
 
     private List<Variable> getParameters(List<GrammarParser.ParameterContext> parametersCtx) {

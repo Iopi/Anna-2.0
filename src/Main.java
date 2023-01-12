@@ -2,7 +2,6 @@ import antlr.GrammarLexer;
 import antlr.GrammarParser;
 
 import instruction.InstructionGenerator;
-import tree.Node;
 import tree.Program;
 import visitor.GrammarVisitor;
 import org.antlr.v4.runtime.CharStreams;
@@ -20,12 +19,12 @@ public class Main {
     public static void main(String [] args) {
         checkArguments(args);
 
-        String javaClassContent = "int cislo = 5 ;";
+//        String javaClassContent = "int cislo = 5 ;";
 
         GrammarLexer lexer = null;
         try {
             lexer = new GrammarLexer(CharStreams.fromFileName(args[0]));
-            lexer = new GrammarLexer(CharStreams.fromString(javaClassContent));
+//            lexer = new GrammarLexer(CharStreams.fromString(javaClassContent));
         } catch (IOException e) {
 
         }
