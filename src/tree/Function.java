@@ -9,18 +9,17 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class Function extends Symbol {
+public class Function extends Symbol{
 
 //    private DataType type;
 
-    HashMap<String, Symbol> symbolTable;
+    private HashMap<String, Symbol> symbolTable;
 
-    public Function(/*DataType type, */String ident, List<Variable> parameters) {
-        super();
-        setName(ident);
+    public Function(/*DataType type, */String ident, List<Declaration> parameters) {
 //        this.type = type;
+        setIdent(ident);
         this.symbolTable = new HashMap<>();
-        for (Symbol symbol : parameters) symbolTable.put(symbol.getName(), symbol);
+        for (Symbol var : parameters) symbolTable.put(var.getIdent(), var);
 
     }
 }

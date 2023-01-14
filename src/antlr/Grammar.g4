@@ -4,17 +4,19 @@ grammar Grammar;
 program: (main)* ;
 
 // main
-main: declaration | inicialization | function ;
+main: declaration | initialization | function ;
 
 // declaration (constants, global and local variables)
 // nasobne prirazeni, paralelni prirazeni
-declaration: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment? SEMICOLON | // int a = b = c = 15 ;
-CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL LEFT_COMPOUND_PARENTHESIS value+
-RIGHT_COMPOUND_PARENTHESIS SEMICOLON ; // int {a b c} = {4 2 3}
+declaration: multiple_assignment | parallel_assignment ;
+// int a = b = c = 15 ;
+multiple_assignment: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment? SEMICOLON ;
+// int {a b c} = {4 2 3}
+parallel_assignment: CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL LEFT_COMPOUND_PARENTHESIS value+
+                     RIGHT_COMPOUND_PARENTHESIS SEMICOLON ;
 
 // inicialization a = 5;
-inicialization: IDENTIFIER right_side SEMICOLON ;
-right_side: assignment | IDENTIFIER; // chce to lepsi nazev
+initialization: IDENTIFIER assignment SEMICOLON ;
 
 // function
 function: FUNC IDENTIFIER  LEFT_ROUND_PARENTHESIS (parameter)* RIGHT_ROUND_PARENTHESIS statement ;
@@ -24,17 +26,17 @@ FUNC: 'function';
 // statement
 statement: LEFT_COMPOUND_PARENTHESIS statement_body+ RIGHT_COMPOUND_PARENTHESIS ;
 
-statement_body: declaration | inicialization | cycle | conditional | function_call SEMICOLON ;
+statement_body: declaration | initialization | cycle | conditional | function_call SEMICOLON ;
 
 // identifier (variable/function name)
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]* ;
 
-assignment: EQUAL expression ;
+assignment: EQUAL expression | EQUAL STRING | EQUAL ARRAY;
 
 // TODO boolean, real, string, array, function name ...
 
 // expression
-expression: MINUS? INT | MINUS? REAL | BOOLEAN | function_call |
+expression: MINUS? INT | MINUS? REAL | BOOLEAN | IDENTIFIER// | function_call
           | LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
           | expression op=(MULT | DIVISION) expression
           | expression op=(PLUS | MINUS) expression
@@ -45,7 +47,7 @@ expression: MINUS? INT | MINUS? REAL | BOOLEAN | function_call |
 
 //expression: value | advanced_expression ;
 //advanced_expression: value; // TODO math, bool op,...
-value: MINUS? INT | MINUS? REAL | BOOLEAN | STRING | ARRAY | function_call ;
+value: MINUS? INT | MINUS? REAL | BOOLEAN | STRING | ARRAY ;// | function_call ;
 
 // conditonal
 conditional: if_part else_part? ; 

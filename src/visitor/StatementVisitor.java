@@ -3,9 +3,9 @@ package visitor;
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import tree.Declaration;
 import tree.Function;
 import tree.Statement;
-import tree.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +22,13 @@ public class StatementVisitor extends GrammarBaseVisitor<Statement> {
 
         for (GrammarParser.Statement_bodyContext statementBodyCtx: statementBodiesCtx) {
             if (statementBodyCtx.declaration() != null) {
-                List<Variable> variables = new DeclarationVisitor().visit(statementBodyCtx.declaration());
-                for (Variable new_var : variables) {
-                    for (Variable var : statement.getVariables())
-                        if (new_var.getName().equals(var.getName()))
-                            throw new RuntimeException("Variable " + new_var.getName() + " already exist.");
+                List<Declaration> declarations = new DeclarationVisitor().visit(statementBodyCtx.declaration());
+                for (Declaration new_dec : declarations) {
+                    for (Declaration dec : statement.getDeclarations())
+                        if (new_dec.getIdent().equals(dec.getIdent()))
+                            throw new RuntimeException("Variable " + new_dec.getIdent() + " already exist.");
 
-                    statement.getVariables().add(new_var);
+                    statement.getDeclarations().add(new_dec);
                 }
             }
 //            else if (statementBodyCtx.cycle() != null) {

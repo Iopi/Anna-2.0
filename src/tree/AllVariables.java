@@ -7,12 +7,12 @@ import java.util.List;
 
 @Getter
 public class AllVariables {
-    List<Variable> variables;
-    List<InicialVariable> iniVariables;
+    List<Declaration> declarations;
+    List<Initialization> initializations;
 
     public AllVariables() {
-        variables = new ArrayList<>();
-        iniVariables = new ArrayList<>();
+        declarations = new ArrayList<>();
+        initializations = new ArrayList<>();
     }
 
 }

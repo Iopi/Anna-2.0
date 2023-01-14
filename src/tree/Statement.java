@@ -8,14 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class Statement extends Symbol {
-    List<Variable> variables;
+public class Statement {
+    List<Declaration> declarations;
     List<String> iniVariables;
     List<String> iniFunctions;
 
     public Statement() {
-
-        variables = new ArrayList<>();
+        declarations = new ArrayList<>();
         iniVariables = new ArrayList<>();
         iniFunctions = new ArrayList<>();
     }

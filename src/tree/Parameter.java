@@ -1,4 +1,4 @@
 package tree;
 
-public class Parameter extends Symbol{
+public class Parameter {
 }

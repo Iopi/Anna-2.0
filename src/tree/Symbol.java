@@ -7,9 +7,6 @@ import lombok.Setter;
 @Setter
 public abstract class Symbol {
 
-    private String name;
+    private String ident;
 
-    private int size;
-
-    private int address;
 }

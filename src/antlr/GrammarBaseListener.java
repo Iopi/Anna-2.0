@@ -53,25 +53,37 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInicialization(GrammarParser.InicializationContext ctx) { }
+	@Override public void enterMultiple_assignment(GrammarParser.Multiple_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInicialization(GrammarParser.InicializationContext ctx) { }
+	@Override public void exitMultiple_assignment(GrammarParser.Multiple_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRight_side(GrammarParser.Right_sideContext ctx) { }
+	@Override public void enterParallel_assignment(GrammarParser.Parallel_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRight_side(GrammarParser.Right_sideContext ctx) { }
+	@Override public void exitParallel_assignment(GrammarParser.Parallel_assignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInitialization(GrammarParser.InitializationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInitialization(GrammarParser.InitializationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

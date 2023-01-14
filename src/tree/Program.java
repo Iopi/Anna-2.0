@@ -9,12 +9,12 @@ import java.util.List;
 public class Program {
 
     HashMap<String, Symbol> symbolTable;
-    List<InicialVariable> iniVariables;
+    List<Initialization> initializations;
 
-    public Program(List<Variable> declarations, List<Function> functions, List<InicialVariable> iniVariables) {
+    public Program(List<Declaration> declarations, List<Function> functions, List<Initialization> initializations) {
         this.symbolTable = new HashMap<>();
-        for (Symbol symbol : declarations) symbolTable.put(symbol.getName(), symbol);
-        for (Symbol symbol : functions) symbolTable.put(symbol.getName(), symbol);
-        this.iniVariables = iniVariables;
+        for (Symbol symbol : declarations) symbolTable.put(symbol.getIdent(), symbol);
+        for (Symbol symbol : functions) symbolTable.put(symbol.getIdent(), symbol);
+        this.initializations = initializations;
     }
 }

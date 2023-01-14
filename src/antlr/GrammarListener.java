@@ -38,25 +38,35 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitDeclaration(GrammarParser.DeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#inicialization}.
+	 * Enter a parse tree produced by {@link GrammarParser#multiple_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterInicialization(GrammarParser.InicializationContext ctx);
+	void enterMultiple_assignment(GrammarParser.Multiple_assignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#inicialization}.
+	 * Exit a parse tree produced by {@link GrammarParser#multiple_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitInicialization(GrammarParser.InicializationContext ctx);
+	void exitMultiple_assignment(GrammarParser.Multiple_assignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#right_side}.
+	 * Enter a parse tree produced by {@link GrammarParser#parallel_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterRight_side(GrammarParser.Right_sideContext ctx);
+	void enterParallel_assignment(GrammarParser.Parallel_assignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#right_side}.
+	 * Exit a parse tree produced by {@link GrammarParser#parallel_assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitRight_side(GrammarParser.Right_sideContext ctx);
+	void exitParallel_assignment(GrammarParser.Parallel_assignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#initialization}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitialization(GrammarParser.InitializationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#initialization}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitialization(GrammarParser.InitializationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#function}.
 	 * @param ctx the parse tree
