@@ -38,6 +38,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitDeclaration(GrammarParser.DeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GrammarParser#single_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingle_declaration(GrammarParser.Single_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#single_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingle_declaration(GrammarParser.Single_declarationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammarParser#multiple_assignment}.
 	 * @param ctx the parse tree
 	 */
@@ -178,15 +188,15 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitCycle(GrammarParser.CycleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#while}.
+	 * Enter a parse tree produced by {@link GrammarParser#while_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhile(GrammarParser.WhileContext ctx);
+	void enterWhile_cycle(GrammarParser.While_cycleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#while}.
+	 * Exit a parse tree produced by {@link GrammarParser#while_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhile(GrammarParser.WhileContext ctx);
+	void exitWhile_cycle(GrammarParser.While_cycleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#do_while}.
 	 * @param ctx the parse tree
@@ -198,45 +208,45 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitDo_while(GrammarParser.Do_whileContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#switch}.
+	 * Enter a parse tree produced by {@link GrammarParser#switch_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void enterSwitch(GrammarParser.SwitchContext ctx);
+	void enterSwitch_cycle(GrammarParser.Switch_cycleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#switch}.
+	 * Exit a parse tree produced by {@link GrammarParser#switch_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void exitSwitch(GrammarParser.SwitchContext ctx);
+	void exitSwitch_cycle(GrammarParser.Switch_cycleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#repeat}.
+	 * Enter a parse tree produced by {@link GrammarParser#case_body}.
 	 * @param ctx the parse tree
 	 */
-	void enterRepeat(GrammarParser.RepeatContext ctx);
+	void enterCase_body(GrammarParser.Case_bodyContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#repeat}.
+	 * Exit a parse tree produced by {@link GrammarParser#case_body}.
 	 * @param ctx the parse tree
 	 */
-	void exitRepeat(GrammarParser.RepeatContext ctx);
+	void exitCase_body(GrammarParser.Case_bodyContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#for}.
+	 * Enter a parse tree produced by {@link GrammarParser#repeat_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void enterFor(GrammarParser.ForContext ctx);
+	void enterRepeat_cycle(GrammarParser.Repeat_cycleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#for}.
+	 * Exit a parse tree produced by {@link GrammarParser#repeat_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void exitFor(GrammarParser.ForContext ctx);
+	void exitRepeat_cycle(GrammarParser.Repeat_cycleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#for_declaration}.
+	 * Enter a parse tree produced by {@link GrammarParser#for_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void enterFor_declaration(GrammarParser.For_declarationContext ctx);
+	void enterFor_cycle(GrammarParser.For_cycleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#for_declaration}.
+	 * Exit a parse tree produced by {@link GrammarParser#for_cycle}.
 	 * @param ctx the parse tree
 	 */
-	void exitFor_declaration(GrammarParser.For_declarationContext ctx);
+	void exitFor_cycle(GrammarParser.For_cycleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#function_call}.
 	 * @param ctx the parse tree

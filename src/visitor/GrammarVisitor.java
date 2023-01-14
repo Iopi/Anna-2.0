@@ -27,10 +27,12 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                 separated_declarations = new DeclarationVisitor().visit(mainCtx.declaration());
 
                 for (Declaration separated_declaration : separated_declarations) {
-                    if (separated_declaration.getInitialization().getAssignment() != null) {
-                        boolean correct_ident = false;
-                        String ident = separated_declaration.getInitialization().getAssignment().getIdent();
-                        checkAssignmentIdent(vars, correct_ident, ident);
+                    if (separated_declaration.getInitialization() != null) {
+                        if (separated_declaration.getInitialization().getAssignment() != null) {
+                            boolean correct_ident = false;
+                            String ident = separated_declaration.getInitialization().getAssignment().getIdent();
+                            checkAssignmentIdent(vars, correct_ident, ident);
+                        }
                     }
 
                     for (Declaration declaration : vars.getDeclarations())
@@ -86,13 +88,15 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
         Function new_function;
 
         for (GrammarParser.MainContext mainCtx : mainsCtx) {
-            new_function = new FunctionVisitor().visit(mainCtx.function());
+            if (mainCtx.function() != null) {
+                new_function = new FunctionVisitor().visit(mainCtx.function());
 
-            for (Function function : functions)
-                if (new_function.getIdent().equals(function.getIdent()))
-                    throw new RuntimeException("Function name " + new_function.getIdent() + " already exists.");
+                for (Function function : functions)
+                    if (new_function.getIdent().equals(function.getIdent()))
+                        throw new RuntimeException("Function name " + new_function.getIdent() + " already exists.");
 
-            functions.add(new_function);
+                functions.add(new_function);
+            }
         }
 
         return functions;

@@ -16,14 +16,17 @@ public class DeclarationVisitor extends GrammarBaseVisitor<List<Declaration>> {
     @Override
     public List<Declaration> visitDeclaration(GrammarParser.DeclarationContext ctx) {
         List<Declaration> declarations = new ArrayList<>();
+        if (ctx.single_declaration() != null) {
+            boolean isConst = ctx.single_declaration().CONST() != null;
+            DataType dataType = DataType.getType(ctx.single_declaration().type().getText());
+            String ident = ctx.single_declaration().IDENTIFIER().getText();
+            declarations.add(new Declaration(ident, dataType, isConst, null));
 
-        if (ctx.multiple_assignment() != null) {
+        } else if (ctx.multiple_assignment() != null) {
             boolean isConst = ctx.multiple_assignment().CONST() != null;
             DataType dataType = DataType.getType(ctx.multiple_assignment().type().getText());
-            Assignment assignment = null;
-            if (ctx.multiple_assignment().assignment() != null) {
-                assignment = new AssignmentVisitor().visit(ctx.multiple_assignment().assignment());
-            }
+            Assignment assignment = new AssignmentVisitor().visit(ctx.multiple_assignment().assignment());
+
             for (TerminalNode ident : ctx.multiple_assignment().IDENTIFIER()) {
                 declarations.add(new Declaration(ident.getText(), dataType, isConst, new Initialization(ident.getText(), assignment)));
             }

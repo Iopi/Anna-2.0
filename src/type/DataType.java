@@ -10,7 +10,7 @@ public enum DataType {
     REAL("real"),
     RATIO("ratio"),
     BOOLEAN("boolean"),
-    STRING("String"),
+    STRING("string"),
     ARRAY("array");
 
     @Getter

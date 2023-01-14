@@ -3,9 +3,7 @@ package visitor;
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import tree.Declaration;
-import tree.Function;
-import tree.Statement;
+import tree.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +15,10 @@ public class StatementVisitor extends GrammarBaseVisitor<Statement> {
         return getStatementBodies(ctx.statement_body());
     }
 
-    private Statement getStatementBodies(List<GrammarParser.Statement_bodyContext> statementBodiesCtx) {
+    public static Statement getStatementBodies(List<GrammarParser.Statement_bodyContext> statementBodiesCtx) {
         Statement statement = new Statement();
+        List<Cycle> cycles = new ArrayList<>();
+        List<Conditional> conditionals = new ArrayList<>();
 
         for (GrammarParser.Statement_bodyContext statementBodyCtx: statementBodiesCtx) {
             if (statementBodyCtx.declaration() != null) {
@@ -31,11 +31,48 @@ public class StatementVisitor extends GrammarBaseVisitor<Statement> {
                     statement.getDeclarations().add(new_dec);
                 }
             }
-//            else if (statementBodyCtx.cycle() != null) {
-//                Cycle cycle = new CycleVisitor().visit(statementBodyCtx.cycle());
-//            } else if (statementBodyCtx.conditional() != null) {
-//                Conditional cond = new ConditionalVisitor().visit(statementBodyCtx.conditional());
-//            }
+            else if (statementBodyCtx.cycle() != null) {
+                Cycle cycle = new CycleVisitor().visit(statementBodyCtx.cycle());
+//                switch (cycle.getCycleType()) {
+//                    case FOR:
+//                        ForCycle fc = (ForCycle) cycle;
+//                        for (Declaration new_dec:fc.getDeclarations()) {
+//                            for (Declaration dec : statement.getDeclarations())
+//                                if (new_dec.getIdent().equals(dec.getIdent()))
+//                                    throw new RuntimeException("Variable " + new_dec.getIdent() + " already exist.");
+//                        }
+//                        for (Declaration new_dec : fc.getStatement().getDeclarations()) {
+//                            for (Declaration dec : statement.getDeclarations())
+//                                if (new_dec.getIdent().equals(dec.getIdent()))
+//                                    throw new RuntimeException("Variable " + new_dec.getIdent() + " already exist.");
+//                        }
+//                        break;
+//                    case WHILE:
+//                        ForCycle f = (ForCycle) cycle;
+//                        for (Declaration new_dec:fc.getDeclarations()) {
+//                            for (Declaration dec : statement.getDeclarations())
+//                                if (new_dec.getIdent().equals(dec.getIdent()))
+//                                    throw new RuntimeException("Variable " + new_dec.getIdent() + " already exist.");
+//                        }
+//                        for (Declaration new_dec : fc.getStatement().getDeclarations()) {
+//                            for (Declaration dec : statement.getDeclarations())
+//                                if (new_dec.getIdent().equals(dec.getIdent()))
+//                                    throw new RuntimeException("Variable " + new_dec.getIdent() + " already exist.");
+//                        }
+//                        break;
+//                    case DO_WHILE:
+//                        break;
+//                    case REPEAT:
+//                        break;
+//                    case SWITCH:
+//                        break;
+//
+//                }
+                statement.getCycles().add(cycle);
+
+            } else if (statementBodyCtx.conditional() != null) {
+                statement.getConditionals().add(new ConditionalVisitor().visit(statementBodyCtx.conditional()));
+            }
             else if (statementBodyCtx.function_call() != null) {
                 String funcName = statementBodyCtx.function_call().IDENTIFIER().get(0).getText();
                 statement.getIniFunctions().add(funcName);
@@ -47,5 +84,6 @@ public class StatementVisitor extends GrammarBaseVisitor<Statement> {
         }
         return statement;
     }
+
 
 }

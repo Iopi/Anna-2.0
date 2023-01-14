@@ -4,13 +4,16 @@ grammar Grammar;
 program: (main)* ;
 
 // main
-main: declaration | initialization | function ;
+//main: declaration | initialization | function ;
+main: statement_body | function ;
 
 // declaration (constants, global and local variables)
 // nasobne prirazeni, paralelni prirazeni
-declaration: multiple_assignment | parallel_assignment ;
+declaration: single_declaration | multiple_assignment | parallel_assignment ;
+// int a;
+single_declaration: CONST? type IDENTIFIER SEMICOLON;
 // int a = b = c = 15 ;
-multiple_assignment: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment? SEMICOLON ;
+multiple_assignment: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment SEMICOLON ;
 // int {a b c} = {4 2 3}
 parallel_assignment: CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL LEFT_COMPOUND_PARENTHESIS value+
                      RIGHT_COMPOUND_PARENTHESIS SEMICOLON ;
@@ -57,36 +60,36 @@ IF: 'if' ;
 ELSE: 'else' ;
 
 // cycle (switch, for, while.. do, do.. while, repeat.. Until)
-cycle: while | do_while | for | repeat | switch ;
-while: WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS statement ;
+cycle: while_cycle | do_while | for_cycle | repeat_cycle | switch_cycle ;
+while_cycle: WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS statement ;
 WHILE: 'while' ;
 do_while: DO statement WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
 DO: 'do' ;
-switch: SWITCH LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
-LEFT_COMPOUND_PARENTHESIS (CASE IDENTIFIER DOUBLE_DOT statement_body+ BREAK SEMICOLON) RIGHT_COMPOUND_PARENTHESIS ;
+switch_cycle: SWITCH LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
+LEFT_COMPOUND_PARENTHESIS (case_body)+ RIGHT_COMPOUND_PARENTHESIS ;
+case_body: CASE (value | IDENTIFIER) DOUBLE_DOT statement_body+ BREAK SEMICOLON;
 SWITCH: 'switch' ;
 CASE: 'case' ;
-repeat: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
+repeat_cycle: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
 REPEAT: 'repeat' ;
 UNTIL: 'until' ;
-for: FOR LEFT_ROUND_PARENTHESIS for_declaration SEMICOLON expression SEMICOLON IDENTIFIER assignment RIGHT_ROUND_PARENTHESIS statement ;
+for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment SEMICOLON expression SEMICOLON IDENTIFIER assignment RIGHT_ROUND_PARENTHESIS statement ;
 FOR: 'for' ;
-//for_declaration: type IDENTIFIER EQUAL value ;
-for_declaration: declaration; /* TODO paralelni nemuze atd. */
 
 // function call
 function_call: IDENTIFIER  LEFT_ROUND_PARENTHESIS (IDENTIFIER COMMA?)* RIGHT_ROUND_PARENTHESIS ;
 
 // type
-type: 'void' | 'int' | 'real' | 'ratio' | 'boolean' | 'string' | array_type ;
+type: type_no_array | array_type ;
+type_no_array: 'void' | 'int' | 'real' | 'ratio' | 'boolean' | 'string' ;
 // data type
 INT: [0-9]+ ;
 //INT: [1-9][0-9]* | 0;
 REAL: INT DOT INT ;
 RATIO: INT DIVISION INT ;
 BOOLEAN: 'true' | 'false' ;
-STRING: [a-zA-Z][a-zA-Z0-9]* ;
-array_type: ARRAY LESS_THAN type GREATER_THAN ;
+STRING: '"'[a-zA-Z0-9]*'"' ;
+array_type: ARRAY LESS_THAN type_no_array GREATER_THAN ;
 ARRAY: 'array' ;
 
 // math

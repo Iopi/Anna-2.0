@@ -53,6 +53,18 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSingle_declaration(GrammarParser.Single_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSingle_declaration(GrammarParser.Single_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMultiple_assignment(GrammarParser.Multiple_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -221,13 +233,13 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhile(GrammarParser.WhileContext ctx) { }
+	@Override public void enterWhile_cycle(GrammarParser.While_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhile(GrammarParser.WhileContext ctx) { }
+	@Override public void exitWhile_cycle(GrammarParser.While_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -245,49 +257,49 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSwitch(GrammarParser.SwitchContext ctx) { }
+	@Override public void enterSwitch_cycle(GrammarParser.Switch_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSwitch(GrammarParser.SwitchContext ctx) { }
+	@Override public void exitSwitch_cycle(GrammarParser.Switch_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRepeat(GrammarParser.RepeatContext ctx) { }
+	@Override public void enterCase_body(GrammarParser.Case_bodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRepeat(GrammarParser.RepeatContext ctx) { }
+	@Override public void exitCase_body(GrammarParser.Case_bodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFor(GrammarParser.ForContext ctx) { }
+	@Override public void enterRepeat_cycle(GrammarParser.Repeat_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFor(GrammarParser.ForContext ctx) { }
+	@Override public void exitRepeat_cycle(GrammarParser.Repeat_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFor_declaration(GrammarParser.For_declarationContext ctx) { }
+	@Override public void enterFor_cycle(GrammarParser.For_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFor_declaration(GrammarParser.For_declarationContext ctx) { }
+	@Override public void exitFor_cycle(GrammarParser.For_cycleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

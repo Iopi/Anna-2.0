@@ -29,6 +29,12 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclaration(GrammarParser.DeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link GrammarParser#single_declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingle_declaration(GrammarParser.Single_declarationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link GrammarParser#multiple_assignment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -113,11 +119,11 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCycle(GrammarParser.CycleContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link GrammarParser#while}.
+	 * Visit a parse tree produced by {@link GrammarParser#while_cycle}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWhile(GrammarParser.WhileContext ctx);
+	T visitWhile_cycle(GrammarParser.While_cycleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link GrammarParser#do_while}.
 	 * @param ctx the parse tree
@@ -125,29 +131,29 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDo_while(GrammarParser.Do_whileContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link GrammarParser#switch}.
+	 * Visit a parse tree produced by {@link GrammarParser#switch_cycle}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSwitch(GrammarParser.SwitchContext ctx);
+	T visitSwitch_cycle(GrammarParser.Switch_cycleContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link GrammarParser#repeat}.
+	 * Visit a parse tree produced by {@link GrammarParser#case_body}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRepeat(GrammarParser.RepeatContext ctx);
+	T visitCase_body(GrammarParser.Case_bodyContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link GrammarParser#for}.
+	 * Visit a parse tree produced by {@link GrammarParser#repeat_cycle}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFor(GrammarParser.ForContext ctx);
+	T visitRepeat_cycle(GrammarParser.Repeat_cycleContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link GrammarParser#for_declaration}.
+	 * Visit a parse tree produced by {@link GrammarParser#for_cycle}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFor_declaration(GrammarParser.For_declarationContext ctx);
+	T visitFor_cycle(GrammarParser.For_cycleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link GrammarParser#function_call}.
 	 * @param ctx the parse tree

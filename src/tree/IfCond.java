@@ -5,7 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Conditional {
-    private IfCond ic;
-    private ElseCond ec;
+public class IfCond {
+
+    private Expression exp;
+    private Statement statement;
 }

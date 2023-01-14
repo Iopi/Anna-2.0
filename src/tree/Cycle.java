@@ -1,4 +1,11 @@
 package tree;
 
-public class Cycle {
+import lombok.Getter;
+import lombok.Setter;
+import type.CycleType;
+
+public abstract class Cycle {
+    @Getter
+    @Setter
+    private CycleType cycleType;
 }
