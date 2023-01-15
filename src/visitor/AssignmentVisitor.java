@@ -3,24 +3,28 @@ package visitor;
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import tree.Assignment;
-import tree.Initialization;
+import tree.value.StringValue;
+import tree.value.Value;
+import type.DataType;
 
 public class AssignmentVisitor extends GrammarBaseVisitor<Assignment> {
     @Override
     public Assignment visitAssignment(GrammarParser.AssignmentContext ctx) {
-        String ident = "";
-        String value = "";
+        String ident = null;
+        Value value = null;
         if (ctx.expression() != null) {
             if (ctx.expression().IDENTIFIER() != null)
                 ident = ctx.expression().IDENTIFIER().getText();
-            else
-                value = ctx.expression().getText();
+//            else // TODO
+//                value = ctx.expression().getText();
 
         } else if (ctx.STRING() != null) {
-            value = ctx.STRING().getText();
+            String val = ctx.STRING().getText();
+            value = new StringValue(val, DataType.STRING);
         }
         else if (ctx.ARRAY() != null) {
-            value = ctx.STRING().getText();
+            // TODO
+//            value = ctx.STRING().getText();
         }
 
         return new Assignment(ident, value);

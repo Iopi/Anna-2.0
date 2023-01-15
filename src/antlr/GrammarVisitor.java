@@ -167,6 +167,12 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitType(GrammarParser.TypeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link GrammarParser#type_no_array}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType_no_array(GrammarParser.Type_no_arrayContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link GrammarParser#array_type}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

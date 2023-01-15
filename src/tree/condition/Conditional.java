@@ -1,4 +1,4 @@
-package tree;
+package tree.condition;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

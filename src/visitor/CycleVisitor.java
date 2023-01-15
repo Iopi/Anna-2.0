@@ -4,6 +4,7 @@ import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import tree.*;
+import tree.cycle.*;
 import type.CycleType;
 import type.DataType;
 
@@ -52,10 +53,26 @@ public class CycleVisitor extends GrammarBaseVisitor<Cycle> {
             Expression exp = new ExpressionVisitor().visit(ctx.switch_cycle().expression());
             List<Case> cases = new ArrayList<>();
             for (GrammarParser.Case_bodyContext caseCtx : ctx.switch_cycle().case_body()) {
-                String ident = caseCtx.IDENTIFIER().getText();
-                Statement statement = StatementVisitor.getStatementBodies(caseCtx.statement_body());
+                Assignment assignment = null;
+                if (caseCtx.IDENTIFIER() != null) {
+                    assignment = new Assignment(caseCtx.IDENTIFIER().getText(), null);
+                } else if(caseCtx.value() != null) {
+                    assignment = DeclarationVisitor.getValue(caseCtx.value());
+                }
+                List<Declaration> declarations = new ArrayList<>();
+                for (GrammarParser.DeclarationContext decCtx : caseCtx.declaration()) {
+                    declarations.addAll(new DeclarationVisitor().visit(decCtx));
+                }
+                List<Initialization> initializations = new ArrayList<>();
+                for (GrammarParser.InitializationContext iniCtx : caseCtx.initialization()) {
+                    initializations.add(new InitializationVisitor().visit(iniCtx));
+                }
+                List<StatementBody> statementBodies = new ArrayList<>();
+                for (GrammarParser.Statement_bodyContext sbCtx : caseCtx.statement_body()) {
+                    statementBodies.add(new Statement_bodyVisitor().visit(sbCtx));
+                }
 
-                cases.add(new Case(ident, statement));
+                cases.add(new Case(assignment, declarations, initializations, statementBodies));
             }
 
             SwitchCycle sc = new SwitchCycle(exp, cases);
@@ -65,6 +82,7 @@ public class CycleVisitor extends GrammarBaseVisitor<Cycle> {
         }
         throw new RuntimeException("Unknown cycle.");
     }
+    
 
     private List<Declaration> getDeclaration(GrammarParser.Multiple_assignmentContext maCtx) {
         List<Declaration> declarations = new ArrayList<>();

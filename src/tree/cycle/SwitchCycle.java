@@ -1,7 +1,8 @@
-package tree;
+package tree.cycle;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import tree.Expression;
 
 import java.util.List;
 

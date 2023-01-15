@@ -3,6 +3,9 @@ package visitor;
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import tree.*;
+import tree.condition.Conditional;
+import tree.condition.ElseCond;
+import tree.condition.IfCond;
 
 public class ConditionalVisitor extends GrammarBaseVisitor<Conditional> {
 

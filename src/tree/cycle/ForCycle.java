@@ -1,7 +1,12 @@
-package tree;
+package tree.cycle;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import tree.Assignment;
+import tree.Declaration;
+import tree.Expression;
+import tree.Statement;
+import tree.cycle.Cycle;
 
 import java.util.List;
 

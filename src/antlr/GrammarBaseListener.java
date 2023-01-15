@@ -329,6 +329,18 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterType_no_array(GrammarParser.Type_no_arrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitType_no_array(GrammarParser.Type_no_arrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArray_type(GrammarParser.Array_typeContext ctx) { }
 	/**
 	 * {@inheritDoc}

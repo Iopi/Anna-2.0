@@ -3,9 +3,11 @@ package visitor;
 import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import tree.Assignment;
-import tree.Declaration;
-import tree.Initialization;
+import tree.*;
+import tree.value.BoolValue;
+import tree.value.IntValue;
+import tree.value.RealValue;
+import tree.value.StringValue;
 import type.DataType;
 
 import java.util.ArrayList;
@@ -48,10 +50,33 @@ public class DeclarationVisitor extends GrammarBaseVisitor<List<Declaration>> {
             for (int i = 0; i < identifiers.size(); i++) {
                 String ident = identifiers.get(i).getText();
                 String value = valuesCtx.get(i).getText();
-                Assignment assignment = new Assignment("", value);
+                Assignment assignment = getValue(valuesCtx.get(i));
                 declarations.add(new Declaration(ident, dataType, isConst, new Initialization(ident, assignment)));
             }
         }
         return declarations;
+    }
+
+    public static Assignment getValue(GrammarParser.ValueContext valueContext) {
+        if (valueContext.INT() != null) {
+            int value = Integer.parseInt(valueContext.INT().getText());
+            if (valueContext.MINUS() != null)
+                value *= -1;
+            return new Assignment(null, new IntValue(value, DataType.INT));
+        } else if (valueContext.REAL() != null) {
+            double value = Double.parseDouble(valueContext.REAL().getText());
+            if (valueContext.MINUS() != null)
+                value *= -1;
+            return new Assignment(null, new RealValue(value, DataType.REAL));
+        } else if (valueContext.BOOLEAN() != null) {
+            boolean value = Boolean.parseBoolean(valueContext.BOOLEAN().getText());
+            return new Assignment(null, new BoolValue(value, DataType.BOOLEAN));
+        } else if (valueContext.STRING() != null) {
+            String value = valueContext.STRING().getText();
+            return new Assignment(null, new StringValue(value, DataType.STRING));
+        } else if (valueContext.ARRAY() != null) {
+            // TODO
+        }
+        throw new RuntimeException("Unexpected data type " + valueContext.getText());
     }
 }

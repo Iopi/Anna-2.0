@@ -1,4 +1,4 @@
-package tree;
+package tree.cycle;
 
 import lombok.Getter;
 import lombok.Setter;

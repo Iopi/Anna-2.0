@@ -13,8 +13,57 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
     public Program visitProgram(GrammarParser.ProgramContext ctx) {
         List<Function> functions = getFunction(ctx.main());
         AllVariables vars = getVariables(ctx.main());
+        List<StatementBody> statementBodies = new ArrayList<>();
 
-        return new Program(vars.getDeclarations(), functions, vars.getInitializations());
+        for (GrammarParser.MainContext mainCtx : ctx.main()) {
+            statementBodies.add(new Statement_bodyVisitor().visit(mainCtx.statement_body()));
+        }
+
+        dataTypeControl(vars.getDeclarations(), functions, vars.getInitializations(), statementBodies);
+
+        return new Program(vars.getDeclarations(), functions, vars.getInitializations(), statementBodies);
+    }
+
+    private void dataTypeControl(List<Declaration> declarations, List<Function> functions, List<Initialization> initializations, List<StatementBody> statementBodies) {
+        for (StatementBody sb : statementBodies) {
+            if (sb.getCalledFunction() != null) {
+                boolean correctFunc = false;
+                for (Function func : functions)
+                    if (func.getIdent().equals(sb.getCalledFunction())) {
+                        correctFunc = true;
+                        break;
+                    }
+                if (!correctFunc)
+                    throw new RuntimeException("Function " + sb.getCalledFunction() + " not exists.");
+            }
+        }
+
+        for (Initialization ini : initializations) {
+            boolean correctIdent = false;
+            for (Declaration dec : declarations) {
+                if (dec.getInitialization() != null)
+                    if (dec.getDataType() != dec.getInitialization().getAssignment().getValue().getDataType())
+                        throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value");
+
+                if (dec.getIdent().equals(ini.getName())) {
+                    correctIdent = true;
+                    if (ini.getAssignment().getValue() != null) {
+                        if (dec.getDataType() != ini.getAssignment().getValue().getDataType())
+                            throw new RuntimeException("Initialization " + ini.getName() + " has wrong data type of value");
+                    } else {
+                        String ident = ini.getAssignment().getIdent();
+                        for (Declaration dec1 : declarations) {
+                            if (ident.equals(dec1.getIdent())) {
+                                if (dec.getDataType() != dec1.getDataType())
+                                    throw new RuntimeException("Initialization " + ini.getName() + " has wrong data type of value");
+                            }
+                        }
+                    }
+                }
+                if (!correctIdent)
+                    throw new RuntimeException("Variable " + dec.getIdent() + " not exists.");
+            }
+        }
     }
 
     private AllVariables getVariables(List<GrammarParser.MainContext> mainsCtx) {
@@ -41,8 +90,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
 
                     vars.getDeclarations().add(separated_declaration);
                 }
-            }
-            else if (mainCtx.initialization() != null) {
+            } else if (mainCtx.initialization() != null) {
                 initialization = new InitializationVisitor().visit(mainCtx.initialization());
 
                 boolean correct_var = false;
@@ -70,7 +118,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
     }
 
     private void checkAssignmentIdent(AllVariables vars, boolean correct_ident, String ident) {
-        if (!ident.equals("")) {
+        if (ident != null) {
             for (Declaration declaration : vars.getDeclarations()) {
                 if (ident.equals(declaration.getIdent())) {
                     correct_ident = true;

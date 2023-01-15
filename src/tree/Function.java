@@ -8,16 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
 public class Function extends Symbol{
 
 //    private DataType type;
 
-    private HashMap<String, Symbol> symbolTable;
+    private final HashMap<String, Symbol> symbolTable;
+    private final Statement statement;
 
-    public Function(/*DataType type, */String ident, List<Declaration> parameters) {
+    public Function(/*DataType type, */String ident, List<Declaration> parameters, Statement statement) {
 //        this.type = type;
         setIdent(ident);
+        this.statement = statement;
         this.symbolTable = new HashMap<>();
         for (Symbol var : parameters) symbolTable.put(var.getIdent(), var);
 
