@@ -4,7 +4,7 @@ import type.DataType;
 
 public class RealValue extends Value {
 
-    public RealValue(double value, DataType dataType) {
+    public RealValue(int[] value, DataType dataType) {
         setDataType(dataType);
         setValue(value);
     }

@@ -2,7 +2,7 @@ package tree.cycle;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import tree.Expression;
+import tree.expression.Expression;
 import tree.Statement;
 
 @Getter

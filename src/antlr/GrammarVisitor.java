@@ -89,6 +89,48 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(GrammarParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link GrammarParser#exp_op}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp_op(GrammarParser.Exp_opContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#exp_parenthesis}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp_parenthesis(GrammarParser.Exp_parenthesisContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#exp_mult_div}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp_mult_div(GrammarParser.Exp_mult_divContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#exp_plus_minus}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp_plus_minus(GrammarParser.Exp_plus_minusContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#exp_not}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp_not(GrammarParser.Exp_notContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#exp_eqv}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp_eqv(GrammarParser.Exp_eqvContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#exp_and_or}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp_and_or(GrammarParser.Exp_and_orContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link GrammarParser#value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -172,6 +214,18 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitType_no_array(GrammarParser.Type_no_arrayContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#real}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReal(GrammarParser.RealContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link GrammarParser#ratio}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRatio(GrammarParser.RatioContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link GrammarParser#array_type}.
 	 * @param ctx the parse tree

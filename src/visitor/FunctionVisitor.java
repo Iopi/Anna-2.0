@@ -40,7 +40,7 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
                         if (new_dec.getDataType() != ini.getAssignment().getValue().getDataType())
                             throw new RuntimeException("Initialization " + ini.getName()+ " has wrong data type of value");
                     } else {
-                        String ident = ini.getAssignment().getIdent();
+                        String ident = ini.getAssignment().getExpression().getIdent();
                         for (Declaration dec1 : statement.getDeclarations()) {
                             if (ident.equals(dec1.getIdent())) {
                                 correctType = true;
@@ -71,7 +71,7 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
                             if (dec.getDataType() != ini.getAssignment().getValue().getDataType())
                                 throw new RuntimeException("Initialization " + ini.getName() + " has wrong data type of value");
                         } else {
-                            String ident = ini.getAssignment().getIdent();
+                            String ident = ini.getAssignment().getExpression().getIdent();
                             for (Declaration dec1 : statement.getDeclarations()) {
                                 if (ident.equals(dec1.getIdent())) {
                                     correctType = true;
@@ -163,7 +163,7 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
                     if (separated_declaration.getInitialization() != null) {
                         if (separated_declaration.getInitialization().getAssignment() != null) {
                             boolean correct_ident = false;
-                            String ident = separated_declaration.getInitialization().getAssignment().getIdent();
+                            String ident = separated_declaration.getInitialization().getAssignment().getExpression().getIdent();
                             checkAssignmentIdent(vars, correct_ident, ident);
                         }
                     }
@@ -192,7 +192,7 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
                 if (!correct_var)
                     throw new RuntimeException("Variable " + initialization.getName() + " not exists.");
 
-                String ident = initialization.getAssignment().getIdent();
+                String ident = initialization.getAssignment().getExpression().getIdent();
                 checkAssignmentIdent(vars, correct_ident, ident);
 
                 vars.getInitializations().add(initialization);

@@ -5,6 +5,7 @@ import antlr.GrammarParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import tree.*;
 import tree.cycle.*;
+import tree.expression.Expression;
 import type.CycleType;
 import type.DataType;
 
@@ -55,9 +56,9 @@ public class CycleVisitor extends GrammarBaseVisitor<Cycle> {
             for (GrammarParser.Case_bodyContext caseCtx : ctx.switch_cycle().case_body()) {
                 Assignment assignment = null;
                 if (caseCtx.IDENTIFIER() != null) {
-                    assignment = new Assignment(caseCtx.IDENTIFIER().getText(), null);
+                    assignment = new Assignment(null, new Expression(caseCtx.IDENTIFIER().getText(), null, null));
                 } else if(caseCtx.value() != null) {
-                    assignment = DeclarationVisitor.getValue(caseCtx.value());
+                    assignment = ExpressionVisitor.getValue(caseCtx.value());
                 }
                 List<Declaration> declarations = new ArrayList<>();
                 for (GrammarParser.DeclarationContext decCtx : caseCtx.declaration()) {

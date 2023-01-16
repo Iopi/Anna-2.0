@@ -1,12 +1,8 @@
-void main() {
 
-    int limit = 5;
+int limit = 5;
 
-    int calc = 0;
+int calc = 0;
 
-    for(int i = 0; i < limit; i = i + 1) {
-        calc = calc + 3;
-    }
-
-    return;
+for(int i = 0; i < limit; i = i + 1) {
+    calc = calc + 3;
 }

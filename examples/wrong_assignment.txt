@@ -1,8 +1,4 @@
-void main() {
 
-    int a = 4;
-    bool b = true;
-    int c = b;
-
-    return;
-}
+int a = 4;
+boolean b = true;
+int c = b;

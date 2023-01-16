@@ -4,14 +4,12 @@ grammar Grammar;
 program: (main)* ;
 
 // main
-//main: declaration | initialization | function ;
 main: declaration | initialization | statement_body | function ;
 
-// declaration (constants, global and local variables)
-// nasobne prirazeni, paralelni prirazeni
+// deklarace, nasobne prirazeni, paralelni prirazeni
 declaration: single_declaration | multiple_assignment | parallel_assignment ;
 // int a;
-single_declaration: CONST? type IDENTIFIER SEMICOLON;
+single_declaration: type IDENTIFIER SEMICOLON;
 // int a = b = c = 15 ;
 multiple_assignment: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment SEMICOLON ;
 // int {a b c} = {4 2 3}
@@ -31,26 +29,22 @@ statement: LEFT_COMPOUND_PARENTHESIS (declaration | initialization | statement_b
 
 statement_body: /*declaration | initialization | */cycle | conditional | function_call SEMICOLON ;
 
-// identifier (variable/function name)
-IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]* ;
-
 assignment: EQUAL expression | EQUAL STRING | EQUAL ARRAY;
 
-// TODO boolean, real, string, array, function name ...
-
 // expression
-expression: MINUS? INT | MINUS? REAL | BOOLEAN | IDENTIFIER// | function_call
-          | LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
-          | expression op=(MULT | DIVISION) expression
-          | expression op=(PLUS | MINUS) expression
-          | expression op=NOT expression
-          | expression op=(EQV_EQV | NOT_EQV | LESS_THAN | GREATER_THAN | LESS_THAN_OR_EQV | GREATER_THAN_OR_EQV) expression
-          | expression op=(AND | OR) expression
-          ;
+expression: MINUS? INT | MINUS? real | MINUS? ratio | BOOLEAN | IDENTIFIER// | function_call
+          | exp_parenthesis | expression exp_op ;
 
-//expression: value | advanced_expression ;
-//advanced_expression: value; // TODO math, bool op,...
-value: MINUS? INT | MINUS? REAL | BOOLEAN | STRING | ARRAY ;// | function_call ;
+exp_op: exp_mult_div | exp_mult_div | exp_plus_minus | exp_not | exp_eqv | exp_and_or;
+exp_parenthesis: LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
+exp_mult_div: op=(MULT | DIVISION) expression ;
+exp_plus_minus: op=(PLUS | MINUS) expression ;
+exp_not: op=NOT expression ;
+exp_eqv: op=(EQV_EQV | NOT_EQV | LESS_THAN | GREATER_THAN | LESS_THAN_OR_EQV | GREATER_THAN_OR_EQV) expression ;
+exp_and_or: op=(AND | OR) expression ;
+
+// value
+value: MINUS? INT | MINUS? real | MINUS? ratio | BOOLEAN | STRING | ARRAY ;// | function_call ;
 
 // conditonal
 conditional: if_part else_part? ; 
@@ -73,7 +67,7 @@ CASE: 'case' ;
 repeat_cycle: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
 REPEAT: 'repeat' ;
 UNTIL: 'until' ;
-for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment SEMICOLON expression SEMICOLON IDENTIFIER assignment RIGHT_ROUND_PARENTHESIS statement ;
+for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment expression SEMICOLON IDENTIFIER assignment RIGHT_ROUND_PARENTHESIS statement ;
 FOR: 'for' ;
 
 // function call
@@ -85,8 +79,8 @@ type_no_array: 'void' | 'int' | 'real' | 'ratio' | 'boolean' | 'string' ;
 // data type
 INT: [0-9]+ ;
 //INT: [1-9][0-9]* | 0;
-REAL: INT DOT INT ;
-RATIO: INT DIVISION INT ;
+real: INT DOT INT ;
+ratio: INT DIVISION INT ;
 BOOLEAN: 'true' | 'false' ;
 STRING: '"'[a-zA-Z0-9]*'"' ;
 array_type: ARRAY LESS_THAN type_no_array GREATER_THAN ;
@@ -131,5 +125,8 @@ DOUBLE_DOT: ':' ;
 COMMA: ',' ;
 SEMICOLON: ';' ;
 BREAK: 'break' ;
+
+// identifier (variable/function name)
+IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]* ;
 SPACE: [ \n\t\r]+ -> skip ;
 

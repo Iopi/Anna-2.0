@@ -16,7 +16,8 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
         List<StatementBody> statementBodies = new ArrayList<>();
 
         for (GrammarParser.MainContext mainCtx : ctx.main()) {
-            statementBodies.add(new Statement_bodyVisitor().visit(mainCtx.statement_body()));
+            if (mainCtx.statement_body() != null)
+                statementBodies.add(new Statement_bodyVisitor().visit(mainCtx.statement_body()));
         }
 
         dataTypeControl(vars.getDeclarations(), functions, vars.getInitializations(), statementBodies);
@@ -37,21 +38,34 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                     throw new RuntimeException("Function " + sb.getCalledFunction() + " not exists.");
             }
         }
+        for (Declaration dec : declarations) {
+            if (dec.getInitialization() != null) {
+                if (dec.getInitialization().getAssignment().getValue() != null) {
+                    if (dec.getDataType() != dec.getInitialization().getAssignment().getValue().getDataType())
+                        throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+
+                } else {
+                    for (Declaration dec2 : declarations) {
+                        if (dec2.getIdent().equals(dec.getInitialization().getAssignment().getExpression().getIdent())) {
+                            if (dec.getDataType() != dec2.getDataType())
+                                throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
         for (Initialization ini : initializations) {
             boolean correctIdent = false;
             for (Declaration dec : declarations) {
-                if (dec.getInitialization() != null)
-                    if (dec.getDataType() != dec.getInitialization().getAssignment().getValue().getDataType())
-                        throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value");
-
                 if (dec.getIdent().equals(ini.getName())) {
                     correctIdent = true;
                     if (ini.getAssignment().getValue() != null) {
                         if (dec.getDataType() != ini.getAssignment().getValue().getDataType())
                             throw new RuntimeException("Initialization " + ini.getName() + " has wrong data type of value");
                     } else {
-                        String ident = ini.getAssignment().getIdent();
+                        String ident = ini.getAssignment().getExpression().getIdent();
                         for (Declaration dec1 : declarations) {
                             if (ident.equals(dec1.getIdent())) {
                                 if (dec.getDataType() != dec1.getDataType())
@@ -79,7 +93,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                     if (separated_declaration.getInitialization() != null) {
                         if (separated_declaration.getInitialization().getAssignment() != null) {
                             boolean correct_ident = false;
-                            String ident = separated_declaration.getInitialization().getAssignment().getIdent();
+                            String ident = separated_declaration.getInitialization().getAssignment().getExpression().getIdent();
                             checkAssignmentIdent(vars, correct_ident, ident);
                         }
                     }
@@ -107,7 +121,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                 if (!correct_var)
                     throw new RuntimeException("Variable " + initialization.getName() + " not exists.");
 
-                String ident = initialization.getAssignment().getIdent();
+                String ident = initialization.getAssignment().getExpression().getIdent();
                 checkAssignmentIdent(vars, correct_ident, ident);
 
                 vars.getInitializations().add(initialization);

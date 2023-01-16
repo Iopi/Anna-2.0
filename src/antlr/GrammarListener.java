@@ -138,6 +138,76 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitExpression(GrammarParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GrammarParser#exp_op}.
+	 * @param ctx the parse tree
+	 */
+	void enterExp_op(GrammarParser.Exp_opContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#exp_op}.
+	 * @param ctx the parse tree
+	 */
+	void exitExp_op(GrammarParser.Exp_opContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#exp_parenthesis}.
+	 * @param ctx the parse tree
+	 */
+	void enterExp_parenthesis(GrammarParser.Exp_parenthesisContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#exp_parenthesis}.
+	 * @param ctx the parse tree
+	 */
+	void exitExp_parenthesis(GrammarParser.Exp_parenthesisContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#exp_mult_div}.
+	 * @param ctx the parse tree
+	 */
+	void enterExp_mult_div(GrammarParser.Exp_mult_divContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#exp_mult_div}.
+	 * @param ctx the parse tree
+	 */
+	void exitExp_mult_div(GrammarParser.Exp_mult_divContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#exp_plus_minus}.
+	 * @param ctx the parse tree
+	 */
+	void enterExp_plus_minus(GrammarParser.Exp_plus_minusContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#exp_plus_minus}.
+	 * @param ctx the parse tree
+	 */
+	void exitExp_plus_minus(GrammarParser.Exp_plus_minusContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#exp_not}.
+	 * @param ctx the parse tree
+	 */
+	void enterExp_not(GrammarParser.Exp_notContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#exp_not}.
+	 * @param ctx the parse tree
+	 */
+	void exitExp_not(GrammarParser.Exp_notContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#exp_eqv}.
+	 * @param ctx the parse tree
+	 */
+	void enterExp_eqv(GrammarParser.Exp_eqvContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#exp_eqv}.
+	 * @param ctx the parse tree
+	 */
+	void exitExp_eqv(GrammarParser.Exp_eqvContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#exp_and_or}.
+	 * @param ctx the parse tree
+	 */
+	void enterExp_and_or(GrammarParser.Exp_and_orContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#exp_and_or}.
+	 * @param ctx the parse tree
+	 */
+	void exitExp_and_or(GrammarParser.Exp_and_orContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammarParser#value}.
 	 * @param ctx the parse tree
 	 */
@@ -277,6 +347,26 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitType_no_array(GrammarParser.Type_no_arrayContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#real}.
+	 * @param ctx the parse tree
+	 */
+	void enterReal(GrammarParser.RealContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#real}.
+	 * @param ctx the parse tree
+	 */
+	void exitReal(GrammarParser.RealContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#ratio}.
+	 * @param ctx the parse tree
+	 */
+	void enterRatio(GrammarParser.RatioContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#ratio}.
+	 * @param ctx the parse tree
+	 */
+	void exitRatio(GrammarParser.RatioContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#array_type}.
 	 * @param ctx the parse tree

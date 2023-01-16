@@ -1,12 +1,8 @@
-void main() {
 
-    int val = 0;
+int val = 0;
 
-    if(false) {
-        val = 5;
-    } else {
-        val = 3
-    }
-
-    return;
+if(false) {
+    val = 5;
+} else {
+    val = 3;
 }

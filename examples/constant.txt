@@ -1,7 +1,3 @@
 const int constant = 5;
 
-void main() {
-
-    int b = constant + 6;
-    return;
-}
+int b = constant + 6;

@@ -1,10 +1,6 @@
-void main() {
 
-    int a = (1 + 5) * (1 - 8);
-    int b = 5 % 4;
+int a = (1 + 5) * (1 - 8);
+int b = 5 / 4;
 
-    boolean ab = 5 < 4;
-    boolean bb = 8 == 8;
-
-    return;
-}
+boolean ab = 5 < 4;
+boolean bb = 8 == 8;

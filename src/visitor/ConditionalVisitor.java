@@ -6,6 +6,7 @@ import tree.*;
 import tree.condition.Conditional;
 import tree.condition.ElseCond;
 import tree.condition.IfCond;
+import tree.expression.Expression;
 
 public class ConditionalVisitor extends GrammarBaseVisitor<Conditional> {
 

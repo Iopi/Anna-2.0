@@ -1,10 +1,7 @@
-void main() {
 
-    int a = 4;
-    inc c;
-    int b = c = 5;
+int a = 4;
+int c;
+int b = c = 5;
 
-    int {e f g h} = {10 11 12 13}
+int {e f g h} = {10 11 12 13};
 
-    return;
-}

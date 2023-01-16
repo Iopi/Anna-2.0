@@ -4,14 +4,12 @@ import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import tree.*;
-import tree.value.BoolValue;
-import tree.value.IntValue;
-import tree.value.RealValue;
-import tree.value.StringValue;
 import type.DataType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static visitor.ExpressionVisitor.getValue;
 
 public class DeclarationVisitor extends GrammarBaseVisitor<List<Declaration>> {
 
@@ -19,10 +17,9 @@ public class DeclarationVisitor extends GrammarBaseVisitor<List<Declaration>> {
     public List<Declaration> visitDeclaration(GrammarParser.DeclarationContext ctx) {
         List<Declaration> declarations = new ArrayList<>();
         if (ctx.single_declaration() != null) {
-            boolean isConst = ctx.single_declaration().CONST() != null;
             DataType dataType = DataType.getType(ctx.single_declaration().type().getText());
             String ident = ctx.single_declaration().IDENTIFIER().getText();
-            declarations.add(new Declaration(ident, dataType, isConst, null));
+            declarations.add(new Declaration(ident, dataType, false, null));
 
         } else if (ctx.multiple_assignment() != null) {
             boolean isConst = ctx.multiple_assignment().CONST() != null;
@@ -49,7 +46,6 @@ public class DeclarationVisitor extends GrammarBaseVisitor<List<Declaration>> {
             }
             for (int i = 0; i < identifiers.size(); i++) {
                 String ident = identifiers.get(i).getText();
-                String value = valuesCtx.get(i).getText();
                 Assignment assignment = getValue(valuesCtx.get(i));
                 declarations.add(new Declaration(ident, dataType, isConst, new Initialization(ident, assignment)));
             }
@@ -57,26 +53,5 @@ public class DeclarationVisitor extends GrammarBaseVisitor<List<Declaration>> {
         return declarations;
     }
 
-    public static Assignment getValue(GrammarParser.ValueContext valueContext) {
-        if (valueContext.INT() != null) {
-            int value = Integer.parseInt(valueContext.INT().getText());
-            if (valueContext.MINUS() != null)
-                value *= -1;
-            return new Assignment(null, new IntValue(value, DataType.INT));
-        } else if (valueContext.REAL() != null) {
-            double value = Double.parseDouble(valueContext.REAL().getText());
-            if (valueContext.MINUS() != null)
-                value *= -1;
-            return new Assignment(null, new RealValue(value, DataType.REAL));
-        } else if (valueContext.BOOLEAN() != null) {
-            boolean value = Boolean.parseBoolean(valueContext.BOOLEAN().getText());
-            return new Assignment(null, new BoolValue(value, DataType.BOOLEAN));
-        } else if (valueContext.STRING() != null) {
-            String value = valueContext.STRING().getText();
-            return new Assignment(null, new StringValue(value, DataType.STRING));
-        } else if (valueContext.ARRAY() != null) {
-            // TODO
-        }
-        throw new RuntimeException("Unexpected data type " + valueContext.getText());
-    }
+
 }
