@@ -1,11 +1,14 @@
+function main() {
+    int limit = 5;
+    int i = 0;
 
-int limit = 5;
-int i = 0;
+    int calc = 0;
 
-int calc = 0;
+    while(i < limit) {
+        i = i + 1;
 
-while(i < limit) {
-    i = i + 1;
+        calc = calc + 3;
+    }
 
-    calc = calc + 3;
+    int wth = i;
 }

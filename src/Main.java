@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main {
@@ -35,9 +36,10 @@ public class Main {
         ParseTree tree = parser.program();
 
         Program program = new GrammarVisitor().visit(tree);
-        InstructionGenerator insGenerator = new InstructionGenerator(program);
-        ArrayList<String> instructionList = insGenerator.generateInstructions();
-        instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructionList);
+//        InstructionGenerator insGenerator = new InstructionGenerator(program);
+//        ArrayList<String> instructionList = insGenerator.generateInstructions();
+        List<String> instructionList = InstructionGenerator.generateInstructions(program);
+        instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), (ArrayList<String>) instructionList);
 
     }
 

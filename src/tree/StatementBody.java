@@ -15,4 +15,5 @@ public class StatementBody {
     List<String> iniVariables;
     String calledFunction;
 
+    private final int order = Order.getMyOrder();
 }

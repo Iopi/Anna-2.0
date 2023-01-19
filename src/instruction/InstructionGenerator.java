@@ -3,13 +3,11 @@ package instruction;
 import tree.Program;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InstructionGenerator {
-    public InstructionGenerator(Program program) {
 
-    }
-
-    public ArrayList<String> generateInstructions() {
+    public static List<String> generateInstructions(Program program) {
         return new ArrayList<>();
     }
 }

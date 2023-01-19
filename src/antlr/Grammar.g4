@@ -1,110 +1,70 @@
 grammar Grammar;
 
-// program
-program: (main)* ;
+program: body ;
+body: (variableDeclaration | functionDeclaration)* ;
 
-// main
-main: declaration | initialization | statement_body | function ;
+/* variables */
+variableDeclaration: singleDeclaration | multipleDeclaration | parallelDeclaration;
+singleDeclaration: CONST? type variableAssignment SEMICOLON;
+multipleDeclaration: CONST? type variableAssignment (COMMA variableAssignment)+ SEMICOLON;
+parallelDeclaration: CONST? type LEFT_ROUND_PARENTHESIS (IDENTIFIER (COMMA IDENTIFIER)*) RIGHT_ROUND_PARENTHESIS EQUALS LEFT_ROUND_PARENTHESIS (expression (COMMA expression)*) RIGHT_ROUND_PARENTHESIS SEMICOLON;
 
-// deklarace, nasobne prirazeni, paralelni prirazeni
-declaration: single_declaration | multiple_assignment | parallel_assignment ;
-// int a;
-single_declaration: type IDENTIFIER SEMICOLON;
-// int a = b = c = 15 ;
-multiple_assignment: CONST? type IDENTIFIER (EQUAL IDENTIFIER)* assignment SEMICOLON ;
-// int {a b c} = {4 2 3}
-parallel_assignment: CONST? type LEFT_COMPOUND_PARENTHESIS IDENTIFIER+ RIGHT_COMPOUND_PARENTHESIS EQUAL
-LEFT_COMPOUND_PARENTHESIS value+ RIGHT_COMPOUND_PARENTHESIS SEMICOLON ;
+variableAssignment: IDENTIFIER (EQUALS expression)?;
+variableInitialization: IDENTIFIER EQUALS (expression (EQUALS expression)*) SEMICOLON;
 
-// inicialization a = 5;
-initialization: IDENTIFIER assignment SEMICOLON ;
+/* functions */
+functionDeclaration: type IDENTIFIER LEFT_ROUND_PARENTHESIS (type IDENTIFIER (COMMA type IDENTIFIER)*)? RIGHT_ROUND_PARENTHESIS statement;
 
-// function
-function: FUNC IDENTIFIER  LEFT_ROUND_PARENTHESIS (parameter)* RIGHT_ROUND_PARENTHESIS statement ;
-parameter: type IDENTIFIER COMMA? ;
-FUNC: 'function';
+/* statement */
+statement: LEFT_COMPOUND_PARENTHESIS (statement (RETURN expression SEMICOLON)?) RIGHT_COMPOUND_PARENTHESIS | (statementBody)* ;
+RETURN: 'return';
+statementBody: (variableDeclaration | variableInitialization | conditional | cycle | (functionCall SEMICOLON)) ;
 
-// statement
-statement: LEFT_COMPOUND_PARENTHESIS (declaration | initialization | statement_body)+ RIGHT_COMPOUND_PARENTHESIS ;
-
-statement_body: /*declaration | initialization | */cycle | conditional | function_call SEMICOLON ;
-
-assignment: EQUAL expression | EQUAL STRING | EQUAL ARRAY;
-
-// expression
-expression: MINUS? INT | MINUS? real | MINUS? ratio | BOOLEAN | IDENTIFIER// | function_call
-          | exp_parenthesis | expression exp_op ;
-
-exp_op: exp_mult_div | exp_mult_div | exp_plus_minus | exp_not | exp_eqv | exp_and_or;
-exp_parenthesis: LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
-exp_mult_div: op=(MULT | DIVISION) expression ;
-exp_plus_minus: op=(PLUS | MINUS) expression ;
-exp_not: op=NOT expression ;
-exp_eqv: op=(EQV_EQV | NOT_EQV | LESS_THAN | GREATER_THAN | LESS_THAN_OR_EQV | GREATER_THAN_OR_EQV) expression ;
-exp_and_or: op=(AND | OR) expression ;
-
-// value
-value: MINUS? INT | MINUS? real | MINUS? ratio | BOOLEAN | STRING | ARRAY ;// | function_call ;
-
-// conditonal
-conditional: if_part else_part? ; 
-if_part: IF LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS statement ;
-else_part: ELSE statement ;
+/* function call */
+functionCall: IDENTIFIER LEFT_ROUND_PARENTHESIS (expression (COMMA expression)*)? RIGHT_ROUND_PARENTHESIS;
+/* if/else */
+conditional: IF LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS statement (ELSE statement)?;
 IF: 'if' ;
 ELSE: 'else' ;
-
-// cycle (switch, for, while.. do, do.. while, repeat.. Until)
-cycle: while_cycle | do_while | for_cycle | repeat_cycle | switch_cycle ;
-while_cycle: WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS statement ;
+/* cycle */
+cycle: whileCycle | doWhile | repeatCycle | forCycle | switchCycle;
+whileCycle: WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS statement;
 WHILE: 'while' ;
-do_while: DO statement WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
+doWhile: DO statement WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS;
 DO: 'do' ;
-switch_cycle: SWITCH LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
-LEFT_COMPOUND_PARENTHESIS (case_body)+ RIGHT_COMPOUND_PARENTHESIS ;
-case_body: CASE (value | IDENTIFIER) DOUBLE_DOT (declaration | initialization | statement_body)+ BREAK SEMICOLON;
-SWITCH: 'switch' ;
-CASE: 'case' ;
-repeat_cycle: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
+repeatCycle: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS;
 REPEAT: 'repeat' ;
 UNTIL: 'until' ;
-for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment expression SEMICOLON IDENTIFIER assignment RIGHT_ROUND_PARENTHESIS statement ;
+forCycle: FOR LEFT_ROUND_PARENTHESIS (variableDeclaration | variableAssignment) SEMICOLON expression SEMICOLON variableAssignment RIGHT_ROUND_PARENTHESIS statement ;
 FOR: 'for' ;
+switchCycle: SWITCH LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS LEFT_COMPOUND_PARENTHESIS (switchBody)+ RIGHT_COMPOUND_PARENTHESIS;
+SWITCH: 'switch' ;
+CASE: 'case' ;
+BREAK: 'break';
+switchBody: CASE (expression | IDENTIFIER) LEFT_COMPOUND_PARENTHESIS (statementBody)+ RIGHT_COMPOUND_PARENTHESIS;
 
-// function call
-function_call: IDENTIFIER  LEFT_ROUND_PARENTHESIS (IDENTIFIER COMMA?)* RIGHT_ROUND_PARENTHESIS ;
+/* expression */
 
-// type
-type: type_no_array | array_type ;
-type_no_array: 'void' | 'int' | 'real' | 'ratio' | 'boolean' | 'string' ;
-// data type
-INT: [0-9]+ ;
-//INT: [1-9][0-9]* | 0;
-real: INT DOT INT ;
-ratio: INT DIVISION INT ;
-BOOLEAN: 'true' | 'false' ;
-STRING: '"'[a-zA-Z0-9]*'"' ;
-array_type: ARRAY LESS_THAN type_no_array GREATER_THAN ;
-ARRAY: 'array' ;
+expression: value | IDENTIFIER | functionCall
+          | LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
+          | expression op=(MULT | DIVISION) expression
+          | expression op=(PLUS | MINUS) expression
+          | expression op=NOT expression
+          | expression op=(EQV_EQV | NOT_EQV | LESS_THAN | GREATER_THAN | LESS_THAN_OR_EQV | GREATER_THAN_OR_EQV) expression
+          | expression op=(AND | OR) expression
+          ;
+
+value: MINUS? INT | MINUS? real | BOOLEAN | STRING ;
+
+type: 'void' | 'int' | 'real' | 'boolean' | 'string' ;
+
+EQUALS: '=';
 
 // math
 MINUS: '-' ;
 PLUS: '+' ;
 MULT: '*' ;
 DIVISION: '/' ;
-
-// keywords
-CONST: 'const' ;
-
-// parenthesis
-LEFT_ROUND_PARENTHESIS: '(' ;
-RIGHT_ROUND_PARENTHESIS: ')' ;
-LEFT_COMPOUND_PARENTHESIS: '{' ;
-RIGHT_COMPOUND_PARENTHESIS: '}' ;
-LEFT_SQUARE_PARENTHESIS: '[' ;
-RIGHT_SQUARE_PARENTHESIS: ']' ;
-
-// operators
-EQUAL: '=' ;
 
 // arithmetic operators
 LESS_THAN: '<';
@@ -119,14 +79,25 @@ AND: '&&' ;
 OR: '||' ;
 NOT: '!' ;
 
-// other
-DOT: '.' ;
-DOUBLE_DOT: ':' ;
-COMMA: ',' ;
-SEMICOLON: ';' ;
-BREAK: 'break' ;
+// parenthesees
+LEFT_ROUND_PARENTHESIS: '(' ;
+RIGHT_ROUND_PARENTHESIS: ')' ;
+LEFT_COMPOUND_PARENTHESIS: '{' ;
+RIGHT_COMPOUND_PARENTHESIS: '}' ;
+/* instruction end */
+SEMICOLON: ';';
+/* common stuff */
+COMMA: ',';
+DOT: '.';
+/* constant */
+CONST: 'const';
+/* data types */
+real: INT DOT INT ;
+BOOLEAN: 'true' | 'false' ;
+STRING: '"'[a-zA-Z0-9]*'"' ;
+INT : [0-9]+;
 
-// identifier (variable/function name)
+// identifier of variable or function
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]* ;
+// spaces
 SPACE: [ \n\t\r]+ -> skip ;
-

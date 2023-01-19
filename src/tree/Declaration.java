@@ -7,7 +7,7 @@ import type.DataType;
 @Getter
 public class Declaration extends Symbol {
 
-//    private Variable variable;
+    //    private Variable variable;
     private final DataType dataType;
 
     private final boolean isConstant;
@@ -20,4 +20,6 @@ public class Declaration extends Symbol {
         this.isConstant = isConstant;
         this.initialization = initialization;
     }
+
+    private final int order = Order.getMyOrder();
 }

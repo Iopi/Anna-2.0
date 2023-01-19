@@ -13,6 +13,4 @@ public class Statement {
     List<Declaration> declarations;
     List<Initialization> initializations;
     List<StatementBody> statementBodies;
-
-
 }
