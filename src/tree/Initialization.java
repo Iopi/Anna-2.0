@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Initialization {
+public class Initialization extends Body {
     private String name;
     private Assignment assignment;
 }

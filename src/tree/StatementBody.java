@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class StatementBody {
+public class StatementBody extends Body{
     Cycle cycles;
     Conditional conditionals;
     List<String> iniVariables;

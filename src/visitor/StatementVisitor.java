@@ -11,19 +11,18 @@ public class StatementVisitor extends GrammarBaseVisitor<Statement> {
 
     @Override
     public Statement visitStatement(GrammarParser.StatementContext ctx) {
-        List<Declaration> declarations = new ArrayList<>();
-        for (GrammarParser.DeclarationContext decCtx : ctx.declaration()) {
-            declarations.addAll(new DeclarationVisitor().visit(decCtx));
+        List<Body> statementBody = new ArrayList<>();
+
+        for (GrammarParser.Statement_optionsContext soCtx :ctx.statement_options()) {
+            if (soCtx.declaration() != null)
+                statementBody.addAll(new DeclarationVisitor().visit(soCtx.declaration()));
+            if (soCtx.initialization() != null)
+                statementBody.add(new InitializationVisitor().visit(soCtx.initialization()));
+            if (soCtx.statement_body() != null)
+                statementBody.add(new Statement_bodyVisitor().visit(soCtx.statement_body()));
         }
-        List<Initialization> initializations = new ArrayList<>();
-        for (GrammarParser.InitializationContext iniCtx : ctx.initialization()) {
-            initializations.add(new InitializationVisitor().visit(iniCtx));
-        }
-        List<StatementBody> statementBodies = new ArrayList<>();
-        for (GrammarParser.Statement_bodyContext sbCtx : ctx.statement_body()) {
-            statementBodies.add(new Statement_bodyVisitor().visit(sbCtx));
-        }
-        return new Statement(declarations, initializations, statementBodies);
+
+        return new Statement(statementBody);
     }
 
 }

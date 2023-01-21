@@ -2,10 +2,7 @@ package tree.cycle;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import tree.Assignment;
-import tree.Declaration;
-import tree.Initialization;
-import tree.StatementBody;
+import tree.*;
 
 import java.util.List;
 
@@ -13,9 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Case {
     private Assignment assignment;
-    private List<Declaration> declarations;
-    private List<Initialization> initializations;
-    private List<StatementBody> statementBodies;
+    private List<Body> statementBody;
+
 //    private Statement statement;
 
 }

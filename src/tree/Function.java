@@ -8,19 +8,32 @@ import java.util.HashMap;
 import java.util.List;
 
 @Getter
-public class Function extends Symbol{
+public class Function extends Symbol {
 
 //    private DataType type;
 
-    private final HashMap<String, Symbol> symbolTable;
-    private final Statement statement;
+    private final List<Body> funcBody;
 
-    public Function(/*DataType type, */String ident, List<Declaration> parameters, Statement statement) {
-//        this.type = type;
+    private final HashMap<String, Symbol> symbolTable;
+
+    public Function(String ident, List<Body> funcBody) {
         setIdent(ident);
-        this.statement = statement;
         this.symbolTable = new HashMap<>();
-        for (Symbol var : parameters) symbolTable.put(var.getIdent(), var);
+        for (Body member: funcBody) {
+            if (member.getClass().equals(Declaration.class) || member.getClass().equals(Function.class)) {
+                Symbol symbol = (Symbol) member;
+                symbolTable.put(symbol.getIdent(), symbol);
+            }
+        }
+        this.funcBody = funcBody;
 
     }
+//    public Function(/*DataType type, */String ident, List<Declaration> parameters, Statement statement) {
+////        this.type = type;
+//        setIdent(ident);
+//        this.statement = statement;
+//        this.symbolTable = new HashMap<>();
+//        for (Symbol var : parameters) symbolTable.put(var.getIdent(), var);
+//
+//    }
 }

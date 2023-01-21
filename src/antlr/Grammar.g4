@@ -25,7 +25,8 @@ parameter: type IDENTIFIER COMMA? ;
 FUNC: 'function';
 
 // statement
-statement: LEFT_COMPOUND_PARENTHESIS (declaration | initialization | statement_body)+ RIGHT_COMPOUND_PARENTHESIS ;
+statement: LEFT_COMPOUND_PARENTHESIS (statement_options)+ RIGHT_COMPOUND_PARENTHESIS ;
+statement_options: declaration | initialization | statement_body;
 
 statement_body: /*declaration | initialization | */cycle | conditional | function_call SEMICOLON ;
 
@@ -61,7 +62,7 @@ do_while: DO statement WHILE LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PAREN
 DO: 'do' ;
 switch_cycle: SWITCH LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS
 LEFT_COMPOUND_PARENTHESIS (case_body)+ RIGHT_COMPOUND_PARENTHESIS ;
-case_body: CASE (value | IDENTIFIER) DOUBLE_DOT (declaration | initialization | statement_body)+ BREAK SEMICOLON;
+case_body: CASE (value | IDENTIFIER) DOUBLE_DOT (statement_options)+ BREAK SEMICOLON;
 SWITCH: 'switch' ;
 CASE: 'case' ;
 repeat_cycle: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;

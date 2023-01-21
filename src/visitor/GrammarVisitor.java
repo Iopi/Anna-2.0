@@ -11,21 +11,39 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
 
     @Override
     public Program visitProgram(GrammarParser.ProgramContext ctx) {
-        List<Function> functions = getFunction(ctx.main());
-        AllVariables vars = getVariables(ctx.main());
-        List<StatementBody> statementBodies = new ArrayList<>();
+        List<Body> mainBody = getMainBody(ctx.main());
+//        List<Function> functions = getFunction(ctx.main());
+//        AllVariables vars = getVariables(ctx.main());
+//        List<StatementBody> statementBodies = new ArrayList<>();
 
-        for (GrammarParser.MainContext mainCtx : ctx.main()) {
-            if (mainCtx.statement_body() != null)
-                statementBodies.add(new Statement_bodyVisitor().visit(mainCtx.statement_body()));
+//        for (GrammarParser.MainContext mainCtx : ctx.main()) {
+//            if (mainCtx.statement_body() != null)
+//                statementBodies.add(new Statement_bodyVisitor().visit(mainCtx.statement_body()));
+//        }
+
+//        dataTypeControl(vars.getDeclarations(), functions, vars.getInitializations(), statementBodies);
+
+        return new Program(mainBody);
+    }
+
+    private List<Body> getMainBody(List<GrammarParser.MainContext> mainCtx) {
+        List<Body> mainBody = new ArrayList<>();
+        for (GrammarParser.MainContext ctx : mainCtx) {
+            if (ctx.function() != null) {
+                mainBody.add(new FunctionVisitor().visit(ctx.function()));
+            } else if (ctx.declaration() != null) {
+                mainBody.addAll(new DeclarationVisitor().visit(ctx.declaration()));
+            } else if (ctx.initialization() != null) {
+                mainBody.add(new InitializationVisitor().visit(ctx.initialization()));
+            } else if (ctx.statement_body() != null) {
+                mainBody.add(new Statement_bodyVisitor().visit(ctx.statement_body()));
+            }
         }
-
-        dataTypeControl(vars.getDeclarations(), functions, vars.getInitializations(), statementBodies);
-
-        return new Program(vars.getDeclarations(), functions, vars.getInitializations(), statementBodies);
+        return mainBody;
     }
 
     private void dataTypeControl(List<Declaration> declarations, List<Function> functions, List<Initialization> initializations, List<StatementBody> statementBodies) {
+//    private void dataTypeControl(List<StatementBody> mainBody) {
         for (StatementBody sb : statementBodies) {
             if (sb.getCalledFunction() != null) {
                 boolean correctFunc = false;

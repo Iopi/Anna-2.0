@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class Symbol {
+public abstract class Symbol extends Body {
 
     private String ident;
 

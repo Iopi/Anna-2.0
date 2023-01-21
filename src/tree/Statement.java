@@ -10,9 +10,10 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class Statement {
-    List<Declaration> declarations;
-    List<Initialization> initializations;
-    List<StatementBody> statementBodies;
+    List<Body> statementBody;
+//    List<Declaration> declarations;
+//    List<Initialization> initializations;
+//    List<StatementBody> statementBodies;
 
 
 }

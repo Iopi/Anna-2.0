@@ -60,20 +60,19 @@ public class CycleVisitor extends GrammarBaseVisitor<Cycle> {
                 } else if(caseCtx.value() != null) {
                     assignment = ExpressionVisitor.getValue(caseCtx.value());
                 }
-                List<Declaration> declarations = new ArrayList<>();
-                for (GrammarParser.DeclarationContext decCtx : caseCtx.declaration()) {
-                    declarations.addAll(new DeclarationVisitor().visit(decCtx));
-                }
-                List<Initialization> initializations = new ArrayList<>();
-                for (GrammarParser.InitializationContext iniCtx : caseCtx.initialization()) {
-                    initializations.add(new InitializationVisitor().visit(iniCtx));
-                }
-                List<StatementBody> statementBodies = new ArrayList<>();
-                for (GrammarParser.Statement_bodyContext sbCtx : caseCtx.statement_body()) {
-                    statementBodies.add(new Statement_bodyVisitor().visit(sbCtx));
+
+                List<Body> statementBody = new ArrayList<>();
+
+                for (GrammarParser.Statement_optionsContext soCtx : caseCtx.statement_options()) {
+                    if (soCtx.declaration() != null)
+                        statementBody.addAll(new DeclarationVisitor().visit(soCtx.declaration()));
+                    if (soCtx.initialization() != null)
+                        statementBody.add(new InitializationVisitor().visit(soCtx.initialization()));
+                    if (soCtx.statement_body() != null)
+                        statementBody.add(new Statement_bodyVisitor().visit(soCtx.statement_body()));
                 }
 
-                cases.add(new Case(assignment, declarations, initializations, statementBodies));
+                cases.add(new Case(assignment, statementBody));
             }
 
             SwitchCycle sc = new SwitchCycle(exp, cases);
