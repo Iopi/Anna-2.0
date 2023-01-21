@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import tree.Assignment;
 import tree.Declaration;
+import tree.Initialization;
 import tree.expression.Expression;
 import tree.Statement;
 
@@ -15,7 +16,7 @@ public class ForCycle extends Cycle {
 
     private List<Declaration> declarations;
     private Expression exp;
-    private Assignment assignment;
+    private Initialization initialization;
     private Statement statement;
 
 }

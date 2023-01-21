@@ -232,10 +232,4 @@ public interface GrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRatio(GrammarParser.RatioContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link GrammarParser#array_type}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArray_type(GrammarParser.Array_typeContext ctx);
 }

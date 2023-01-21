@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class FunctionVisitor extends GrammarBaseVisitor<Function> {
 
     @Override
@@ -22,16 +23,18 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
 
 
         String ident = ctx.IDENTIFIER().getText();
-        List<Body> funcBody = getFuncBody(ctx.statement().statement_options());
-
-//        dataTypeControl(parameters, statement);
+        List<Declaration> parameters = getParameters(ctx.parameter());
+        List<Body> funcBody = new ArrayList<>(parameters);
+        getFuncBody(ctx.statement().statement_options(), funcBody);
+//        List<Declaration> declarations = new ArrayList<>();
+//        List<Function> functions = new ArrayList<>();
+//        dataTypeControl(funcBody, declarations, functions);
 
         return new Function(ident, funcBody);
 
     }
 
-    private List<Body> getFuncBody(List<GrammarParser.Statement_optionsContext> statementOptionsCtx) {
-        List<Body> funcBody = new ArrayList<>();
+    private List<Body> getFuncBody(List<GrammarParser.Statement_optionsContext> statementOptionsCtx, List<Body> funcBody) {
         for (GrammarParser.Statement_optionsContext ctx : statementOptionsCtx) {
             if (ctx.declaration() != null) {
                 funcBody.addAll(new DeclarationVisitor().visit(ctx.declaration()));
@@ -43,6 +46,19 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
         }
         return funcBody;
     }
+
+    private List<Declaration> getParameters(List<GrammarParser.ParameterContext> parametersCtx) {
+        List<Declaration> parameters = new ArrayList<>();
+        for (GrammarParser.ParameterContext ctx : parametersCtx){
+            String ident = ctx.IDENTIFIER().getText();
+            DataType type = DataType.getType(ctx.type().getText());
+            Declaration param = new Declaration(ident, type, false, null, true);            List<Declaration> a = new DeclarationVisitor().visit(ctx);
+            parameters.add(param);
+        }
+
+        return parameters;
+    }
+
 
 //    private void dataTypeControl(List<Declaration> parameters, Statement statement) {
 //        for (Initialization ini: statement.getInitializations()) {
@@ -153,23 +169,7 @@ public class FunctionVisitor extends GrammarBaseVisitor<Function> {
 //
 //    }
 //
-//    private List<Declaration> getParameters(List<GrammarParser.ParameterContext> parametersCtx) {
-//        List<Declaration> parameters = new ArrayList<>();
-//
-//        for (GrammarParser.ParameterContext parameterCtx : parametersCtx) {
-//            String ident = parameterCtx.IDENTIFIER().getText();
-//
-//            for (Declaration dec: parameters)
-//                if (dec.getIdent().equals(ident))
-//                    throw new RuntimeException("Variable " + ident + " already exist in function.");
-//
-//            DataType type = DataType.getType(parameterCtx.type().getText());
-//            Declaration param = new Declaration(ident, type, false, null);
-//            parameters.add(param);
-//        }
-//
-//        return parameters;
-//    }
+
 //    private AllVariables getVariables(List<GrammarParser.MainContext> mainsCtx) {
 //        AllVariables vars = new AllVariables();
 //        List<Declaration> separated_declarations;

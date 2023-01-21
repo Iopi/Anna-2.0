@@ -28,9 +28,9 @@ FUNC: 'function';
 statement: LEFT_COMPOUND_PARENTHESIS (statement_options)+ RIGHT_COMPOUND_PARENTHESIS ;
 statement_options: declaration | initialization | statement_body;
 
-statement_body: /*declaration | initialization | */cycle | conditional | function_call SEMICOLON ;
+statement_body: cycle | conditional | function_call SEMICOLON ;
 
-assignment: EQUAL expression | EQUAL STRING | EQUAL ARRAY;
+assignment: EQUAL expression | EQUAL STRING;
 
 // expression
 expression: MINUS? INT | MINUS? real | MINUS? ratio | BOOLEAN | IDENTIFIER// | function_call
@@ -45,7 +45,7 @@ exp_eqv: op=(EQV_EQV | NOT_EQV | LESS_THAN | GREATER_THAN | LESS_THAN_OR_EQV | G
 exp_and_or: op=(AND | OR) expression ;
 
 // value
-value: MINUS? INT | MINUS? real | MINUS? ratio | BOOLEAN | STRING | ARRAY ;// | function_call ;
+value: MINUS? INT | MINUS? real | MINUS? ratio | BOOLEAN | STRING ;
 
 // conditonal
 conditional: if_part else_part? ; 
@@ -68,14 +68,14 @@ CASE: 'case' ;
 repeat_cycle: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
 REPEAT: 'repeat' ;
 UNTIL: 'until' ;
-for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment expression SEMICOLON IDENTIFIER assignment RIGHT_ROUND_PARENTHESIS statement ;
+for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment expression SEMICOLON IDENTIFIER initialization RIGHT_ROUND_PARENTHESIS statement ;
 FOR: 'for' ;
 
 // function call
 function_call: IDENTIFIER  LEFT_ROUND_PARENTHESIS (IDENTIFIER COMMA?)* RIGHT_ROUND_PARENTHESIS ;
 
 // type
-type: type_no_array | array_type ;
+type: type_no_array ;// | array_type ;
 type_no_array: 'void' | 'int' | 'real' | 'ratio' | 'boolean' | 'string' ;
 // data type
 INT: [0-9]+ ;
@@ -84,8 +84,8 @@ real: INT DOT INT ;
 ratio: INT DIVISION INT ;
 BOOLEAN: 'true' | 'false' ;
 STRING: '"'[a-zA-Z0-9]*'"' ;
-array_type: ARRAY LESS_THAN type_no_array GREATER_THAN ;
-ARRAY: 'array' ;
+//array_type: ARRAY LESS_THAN type_no_array GREATER_THAN ;
+//ARRAY: 'array' ;
 
 // math
 MINUS: '-' ;

@@ -36,9 +36,9 @@ public class CycleVisitor extends GrammarBaseVisitor<Cycle> {
             Statement statement = new StatementVisitor().visit(ctx.for_cycle().statement());
             List<Declaration> declarations = getDeclaration(ctx.for_cycle().multiple_assignment());
             Expression exp = new ExpressionVisitor().visit(ctx.for_cycle().expression());
-            Assignment assignment = new AssignmentVisitor().visit(ctx.for_cycle().expression());
+            Initialization initialization = new InitializationVisitor().visit(ctx.for_cycle().initialization());
 
-            ForCycle fc = new ForCycle(declarations, exp, assignment, statement);
+            ForCycle fc = new ForCycle(declarations, exp, initialization, statement);
             fc.setCycleType(CycleType.FOR);
             return fc;
 
@@ -56,7 +56,7 @@ public class CycleVisitor extends GrammarBaseVisitor<Cycle> {
             for (GrammarParser.Case_bodyContext caseCtx : ctx.switch_cycle().case_body()) {
                 Assignment assignment = null;
                 if (caseCtx.IDENTIFIER() != null) {
-                    assignment = new Assignment(null, new Expression(caseCtx.IDENTIFIER().getText(), null, null));
+                    assignment = new Assignment(new Expression(caseCtx.IDENTIFIER().getText(), null, null));
                 } else if(caseCtx.value() != null) {
                     assignment = ExpressionVisitor.getValue(caseCtx.value());
                 }

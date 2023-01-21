@@ -11,9 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class Statement {
     List<Body> statementBody;
-//    List<Declaration> declarations;
-//    List<Initialization> initializations;
-//    List<StatementBody> statementBodies;
-
 
 }

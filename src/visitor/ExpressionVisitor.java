@@ -107,26 +107,25 @@ public class ExpressionVisitor extends GrammarBaseVisitor<Expression> {
             int value = Integer.parseInt(valueContext.INT().getText());
             if (valueContext.MINUS() != null)
                 value *= -1;
-            return new Assignment(null, new Expression(null, new IntValue(value, DataType.INT), null));
+            return new Assignment(new Expression(null, new IntValue(value, DataType.INT), null));
         } else if (valueContext.real() != null) {
             int [] val = getReal(valueContext.real());
             if (valueContext.MINUS() != null)
                 val[0] *= -1;
-            return new Assignment(null, new Expression(null, new RealValue(val, DataType.REAL), null));
+            return new Assignment(new Expression(null, new RealValue(val, DataType.REAL), null));
         } else if (valueContext.ratio() != null) {
             int [] val = getRatio(valueContext.ratio());
             if (valueContext.MINUS() != null)
                 val[0] *= -1;
-            return new Assignment(null, new Expression(null, new RatioValue(val, DataType.RATIO), null));
+            return new Assignment(new Expression(null, new RatioValue(val, DataType.RATIO), null));
         } else if (valueContext.BOOLEAN() != null) {
             boolean value = Boolean.parseBoolean(valueContext.BOOLEAN().getText());
-            return new Assignment(null, new Expression(null, new BoolValue(value, DataType.BOOLEAN), null));
+            return new Assignment(new Expression(null, new BoolValue(value, DataType.BOOLEAN), null));
         } else if (valueContext.STRING() != null) {
             String value = valueContext.STRING().getText();
-            return new Assignment(null, new Expression(null, new StringValue(value, DataType.STRING), null));
-        } else if (valueContext.ARRAY() != null) {
-            // TODO
+            return new Assignment(new Expression(null, new StringValue(value, DataType.STRING), null));
         }
+
         throw new RuntimeException("Unexpected data type " + valueContext.getText());
     }
 

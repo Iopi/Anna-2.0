@@ -377,14 +377,4 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRatio(GrammarParser.RatioContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GrammarParser#array_type}.
-	 * @param ctx the parse tree
-	 */
-	void enterArray_type(GrammarParser.Array_typeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GrammarParser#array_type}.
-	 * @param ctx the parse tree
-	 */
-	void exitArray_type(GrammarParser.Array_typeContext ctx);
 }
