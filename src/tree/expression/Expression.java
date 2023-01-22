@@ -9,5 +9,5 @@ import tree.value.Value;
 public class Expression {
     private final String ident;
     private final Value value;
-    private final AdvExpression expression;
+    private final AdvExpression advExpression;
 }

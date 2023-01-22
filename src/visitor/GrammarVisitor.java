@@ -4,6 +4,8 @@ import antlr.GrammarBaseVisitor;
 import antlr.GrammarParser;
 import tree.*;
 import tree.cycle.*;
+import tree.expression.*;
+import type.DataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,36 +56,23 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
 
             // kontrola deklaraci
             else if (body.getClass().equals(Declaration.class)) {
-                Declaration new_dec = (Declaration) body;
-                if (new_dec.isParameter()) {
-                    declarations.add(new_dec);
+                Declaration newDec = (Declaration) body;
+                if (newDec.isParameter()) {
+                    declarations.add(newDec);
                     continue;
                 }
 
                 // kontrola deklarace existujici deklarace
                 for (Declaration dec : declarations) {
-                    if (new_dec.getIdent().equals(dec.getIdent())) {
-                        throw new RuntimeException("Variable " + new_dec.getIdent() + " already exists.");
+                    if (newDec.getIdent().equals(dec.getIdent())) {
+                        throw new RuntimeException("Variable " + newDec.getIdent() + " already exists.");
                     }
                 }
-                // kontrola datoveho typu
-                if (new_dec.getInitialization() != null) {
-                    // kontrola datoveho typu hodnoty s datovym typem promenne
-                    if (new_dec.getInitialization().getAssignment().getExpression().getValue() != null) {
-                        if (new_dec.getDataType() != new_dec.getInitialization().getAssignment().getExpression().getValue().getDataType())
-                            throw new RuntimeException("Variable " + new_dec.getIdent() + " has wrong data type of value.");
-                        // kontrola datoveho typu prirazeni s datovym typem promenne
-                    } else {
-                        for (Declaration dec2 : declarations) {
-                            if (dec2.getIdent().equals(new_dec.getInitialization().getAssignment().getExpression().getIdent())) {
-                                if (new_dec.getDataType() != dec2.getDataType())
-                                    throw new RuntimeException("Variable " + new_dec.getIdent() + " has wrong data type of value.");
-                                break;
-                            }
-                        }
-                    }
+                // kontrola datoveho typu a expression
+                if (newDec.getInitialization() != null) {
+                    expressionControl(newDec.getInitialization().getAssignment().getExpression(), newDec, declarations);
                 }
-                declarations.add(new_dec);
+                declarations.add(newDec);
             }
             // kontrola inicializaci
             else if (body.getClass().equals(Initialization.class)) {
@@ -113,7 +102,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                 if (new_sb.getConditionals() != null) {
                     // kontrola vetve if
                     // kontrola promenne v hlavicce
-                    expressionIdentControl(new_sb.getConditionals().getIc().getExp().getIdent(), declarations);
+                    rawExpressionControl(new_sb.getConditionals().getIc().getExp(), declarations, null);
 
                     dataTypeControl(new_sb.getConditionals().getIc().getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
 
@@ -129,16 +118,16 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                         case FOR:
                             ForCycle fc = (ForCycle) new_sb.getCycles();
                             // kontrola deklarace v hlavicce
-                            for (Declaration new_dec : fc.getDeclarations()) {
+                            for (Declaration newDec : fc.getDeclarations()) {
                                 for (Declaration dec : declarations) {
-                                    if (new_dec.getIdent().equals(dec.getIdent())) {
-                                        throw new RuntimeException("Variable " + new_dec.getIdent() + " already exists.");
+                                    if (newDec.getIdent().equals(dec.getIdent())) {
+                                        throw new RuntimeException("Variable " + newDec.getIdent() + " already exists.");
                                     }
                                 }
                             }
 
                             // kontrola promenne v hlavicce
-                            expressionIdentControl(fc.getExp().getIdent(), declarations);
+                            rawExpressionControl(fc.getExp(), declarations, null);
 
                             // kontrola inicializace v hlavicce
                             Initialization new_ini = fc.getInitialization();
@@ -158,7 +147,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                             // kontrola while
                             WhileCycle wc = (WhileCycle) new_sb.getCycles();
                             // kontrola expression
-                            expressionIdentControl(wc.getExp().getIdent(), declarations);
+                            rawExpressionControl(wc.getExp(), declarations,null);
                             // kontrola statement
                             dataTypeControl(wc.getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
                             break;
@@ -170,7 +159,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                             List<Declaration> decs = dataTypeControl(dwc.getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
                             declarations.addAll(decs);
                             // kontrola expression
-                            expressionIdentControl(dwc.getExp().getIdent(), declarations);
+                            rawExpressionControl(dwc.getExp(), declarations, null);
                             // smazani deklaraci ze statementu
                             for (int i = 0; i < decs.size(); i++) {
                                 declarations.remove(declarations.size() - 1);
@@ -184,7 +173,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                             List<Declaration> decs2 = dataTypeControl(rc.getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
                             declarations.addAll(decs2);
                             // kontrola expression
-                            expressionIdentControl(rc.getExp().getIdent(), declarations);
+                            rawExpressionControl(rc.getExp(), declarations, null);
                             // smazani deklaraci ze statementu
                             for (int i = 0; i < decs2.size(); i++) {
                                 declarations.remove(declarations.size() - 1);
@@ -195,11 +184,12 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                             // kontrola switch
                             SwitchCycle sc = (SwitchCycle) new_sb.getCycles();
                             // kontrola expression
-                            expressionIdentControl(sc.getExp().getIdent(), declarations);
+                            rawExpressionControl(sc.getExp(), declarations, null);
+
                             for (Case case_body : sc.getCases()) {
                                 // kontrola case hlavicky
                                 if (case_body.getAssignment().getExpression().getIdent() != null) {
-                                    expressionIdentControl(case_body.getAssignment().getExpression().getIdent(), declarations);
+                                    rawExpressionControl(case_body.getAssignment().getExpression(), declarations, null);
                                 }
                                 // kontrola statement v case body
                                 dataTypeControl(case_body.getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
@@ -213,6 +203,84 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
 
         }
         return declarations;
+    }
+
+    private DataType rawExpressionControl(Expression expression, List<Declaration> declarations, DataType dataType) {
+        // kontrola existence expression identifier
+        if (expression.getIdent() != null) {
+            boolean correctIdent = false;
+            for (Declaration dec : declarations) {
+                if (expression.getIdent().equals(dec.getIdent())) {
+                    correctIdent = true;
+                    if (dataType != null) { // kontrola datoveho typu
+                        if (dataType != dec.getDataType()) {
+                            throw new RuntimeException("Data types in expression are not same: " + dataType + " and " +
+                                    dec.getDataType() + " as variable " + dec.getIdent() + ".");
+                        }
+                    }
+                    dataType = dec.getDataType();
+                    break;
+                }
+            }
+            if (!correctIdent)
+                throw new RuntimeException("Variable " + expression.getIdent() + " not exists.");
+        // kontrola hodnoty expression
+        } else if (expression.getValue() != null) {
+            if (dataType != null) { // kontrola datoveho typu
+                if (dataType != expression.getValue().getDataType()) {
+                    throw new RuntimeException("Data types in expression are not same: " + dataType + " and " +
+                            expression.getValue().getDataType() + ".");
+                }
+            }
+            dataType = expression.getValue().getDataType();
+        }
+        // kontrola advanced expression
+        else {
+            AdvExpression exp = expression.getAdvExpression();
+            if (exp.getClass().equals(ExpParanthesis.class)) {
+                dataType = rawExpressionControl(exp.getExpression1(), declarations, dataType);
+
+            } else {
+                dataType = rawExpressionControl(exp.getExpression1(), declarations, dataType);
+                dataType = rawExpressionControl(exp.getExpression2(), declarations, dataType);
+            }
+        }
+        return dataType;
+    }
+
+    private void expressionControl(Expression expression, Declaration dec, List<Declaration> declarations) {
+        // kontrola datoveho typu hodnoty s datovym typem promenne
+        if (expression.getValue() != null) {
+            if (dec.getDataType() != expression.getValue().getDataType())
+                throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+        }
+        // kontrola datoveho typu prirazeni s datovym typem promenne
+        else if (expression.getIdent() != null) {
+            boolean correctIdent = false;
+            for (Declaration dec2 : declarations) {
+                if (dec2.getIdent().equals(expression.getIdent())) {
+                    correctIdent = true;
+                    if (dec.getDataType() != dec2.getDataType())
+                        throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+                    break;
+                }
+            }
+            if (!correctIdent)
+                throw new RuntimeException("Variable " + expression.getIdent() + " not exists.");
+        }
+        // kontrola advanced expression
+        else {
+            AdvExpression exp = expression.getAdvExpression();
+            if (exp.getClass().equals(ExpParanthesis.class)) {
+                expressionControl(exp.getExpression1(), dec, declarations);
+
+            }
+            // ostatni advanced expression maji vzdy dve expressions
+            else {
+                expressionControl(exp.getExpression1(), dec, declarations);
+                expressionControl(exp.getExpression2(), dec, declarations);
+            }
+        }
     }
 
     private void expressionIdentControl(String expIdent, List<Declaration> declarations) {
@@ -249,21 +317,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
             // kontrola existence promenne
             if (dec.getIdent().equals(new_ini.getName())) {
                 correctIdent = true;
-                // kontrola datoveho typu promenne s hodnotou inicializace
-                if (new_ini.getAssignment().getExpression().getValue() != null) {
-                    if (dec.getDataType() != new_ini.getAssignment().getExpression().getValue().getDataType())
-                        throw new RuntimeException("Initialization " + new_ini.getName() + " has wrong data type of value");
-                }
-                // kontrola datoveho typu promenne s datovym typem prirazeni
-                else {
-                    String ident = new_ini.getAssignment().getExpression().getIdent();
-                    for (Declaration dec1 : declarations) {
-                        if (ident.equals(dec1.getIdent())) {
-                            if (dec.getDataType() != dec1.getDataType())
-                                throw new RuntimeException("Initialization " + new_ini.getName() + " has wrong data type of value");
-                        }
-                    }
-                }
+                expressionControl(new_ini.getAssignment().getExpression(), dec, declarations);
             }
         }
         if (!correctIdent)
