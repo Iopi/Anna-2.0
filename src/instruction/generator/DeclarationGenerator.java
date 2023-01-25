@@ -8,7 +8,9 @@ import tree.Declaration;
 public class DeclarationGenerator {
 
     public static void generateDeclarationInstructions(Declaration d, InstructionGenerator generator, int storage) {
-        /* TODO refactor */
+
+        if (d.getInitialization() == null)
+            return;
         int integerValue = (Integer) d.getInitialization().getAssignment().getExpression().getValue().getValue();
 
         /* store */

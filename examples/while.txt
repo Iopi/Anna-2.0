@@ -1,11 +1,19 @@
+int num1;
+int num2;
+int num3;
+
+function a(int number)
+{
+
+}
+
+function b(int number)
+{
+
+}
+
 function main()
 {
-    if(true)
-    {
-        int a;
-    }
-    else
-    {
-        int b;
-    }
+    a(num1);
+    b(num2);
 }

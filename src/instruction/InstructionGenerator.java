@@ -10,6 +10,7 @@ import tree.Declaration;
 import tree.Function;
 import tree.Program;
 import tree.Symbol;
+import type.DataType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,8 @@ public class InstructionGenerator {
         for (Object o : program.getMainBody()) {
             if (o instanceof Declaration) {
                 declarations.putIfAbsent(((Declaration) o).getIdent(), declBase + (offset++));
+                if (((Declaration) o).getDataType().equals(DataType.REAL))
+                    offset++;
                 DeclarationGenerator.generateDeclarationInstructions((Declaration) o, this, declarations.get(((Declaration) o).getIdent()));
             }
         }
