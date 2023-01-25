@@ -5,6 +5,8 @@ package pl0.type;
  */
 public enum OperationType {
 
+    EMPTY,
+
     /**
      * a = -a
      */
@@ -68,5 +70,9 @@ public enum OperationType {
     /**
      * a <= b
      */
-    LESSER_OR_EQUAL
+    LESSER_OR_EQUAL,
+
+    SPECIAL_OR,
+
+    SPECIAL_NOT
 }

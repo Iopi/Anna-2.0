@@ -15,5 +15,4 @@ public enum OperatorType {
     AND,
     OR,
     NOT;
-
 }

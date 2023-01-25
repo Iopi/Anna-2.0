@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 
 public class Main {
-    public static void main(String [] args) {
+    public static void main(String[] args) {
         checkArguments(args);
 
 //        String javaClassContent = "int cislo = 5 ;";
@@ -36,9 +36,13 @@ public class Main {
 
         Program program = new GrammarVisitor().visit(tree);
         InstructionGenerator insGenerator = new InstructionGenerator(program);
-        ArrayList<String> instructionList = insGenerator.generateInstructions();
-        instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructionList);
+        var abstractInstructions = insGenerator.generateAbstractInstructions();
+        var instructions = insGenerator.generateConcreteInstructions(abstractInstructions);
+        for (var i : instructions) {
+            System.out.println(i);
+        }
 
+        // instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructionList);
     }
 
     private static void instructionToOutput(String fileName, ArrayList<String> instructions) {
