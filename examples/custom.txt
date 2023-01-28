@@ -1,0 +1,12 @@
+real a = 6.9;
+real b = 4.2;
+
+function func1(real val1, real val2)
+{
+
+}
+
+function main()
+{
+    func1(a, b);
+}

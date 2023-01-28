@@ -5,6 +5,8 @@ import instruction.generator.FunctionGenerator;
 import instruction.instruction.AbstractInstruction;
 import instruction.instruction.AbstractLabel;
 import instruction.instruction.IAbstractInstruction;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import pl0.type.InstructionType;
 import tree.Declaration;
 import tree.Function;
@@ -24,7 +26,19 @@ public class InstructionGenerator {
     public List<IAbstractInstruction> instructions = new ArrayList<>();
 
     public Map<String, AbstractLabel> labels = new HashMap<>();
-    public Map<String, Integer> declarations = new HashMap<>();
+    public Map<String, DeclarationPayload> declarations = new HashMap<>();
+
+    @Data
+    @AllArgsConstructor
+    public static class DeclarationPayload {
+        Integer address;
+        DataType type;
+        boolean isConstant;
+        boolean isParameter;
+
+        int level;
+    }
+
     public final int declBase = 3;
     private int offset = 0;
 
@@ -43,17 +57,20 @@ public class InstructionGenerator {
         labels.putIfAbsent("main", new AbstractLabel());
 
         /* init stack size */
-        int initSize = 3 + getDeclarationCount(program.getSymbolTable());
+        int initSize = 3 + getDeclarationAddressCount(program.getSymbolTable());
         var intInstruction = AbstractInstruction.builder().instructionType(InstructionType.INT).par(initSize).level(0).build();
         instructions.add(intInstruction);
 
         /* process all declarations */
         for (Object o : program.getMainBody()) {
             if (o instanceof Declaration) {
-                declarations.putIfAbsent(((Declaration) o).getIdent(), declBase + (offset++));
+                var decl = (Declaration) o;
+                var pl = new DeclarationPayload(declBase + (offset++), decl.getDataType(), decl.isConstant(), decl.isParameter(), 0);
+                declarations.putIfAbsent(((Declaration) o).getIdent(), pl);
                 if (((Declaration) o).getDataType().equals(DataType.REAL))
                     offset++;
-                DeclarationGenerator.generateDeclarationInstructions((Declaration) o, this, declarations.get(((Declaration) o).getIdent()));
+                var decGen = new DeclarationGenerator(this, declarations);
+                decGen.generateDeclarationInstructions((Declaration) o, declarations.get(((Declaration) o).getIdent()).getAddress(), 0);
             }
         }
 
@@ -69,7 +86,8 @@ public class InstructionGenerator {
         for (Object o : program.getMainBody()) {
             if (o instanceof Function) {
                 labels.putIfAbsent(((Function) o).getIdent(), new AbstractLabel());
-                FunctionGenerator.generateFunctionInstructions((Function) o, this);
+                var funGen = new FunctionGenerator(this);
+                funGen.generateFunctionInstructions((Function) o);
             }
         }
 
@@ -99,11 +117,14 @@ public class InstructionGenerator {
         return concreteInstructions;
     }
 
-    public static int getDeclarationCount(HashMap<String, Symbol> symbolTable) {
+    public static int getDeclarationAddressCount(HashMap<String, Symbol> symbolTable) {
         int c = 0;
         for (Map.Entry<String, Symbol> entry : symbolTable.entrySet()) {
-            if (entry.getValue() instanceof Declaration)
+            if (entry.getValue() instanceof Declaration && !((Declaration) entry.getValue()).isParameter()) {
                 c++;
+                if (((Declaration) entry.getValue()).getDataType().equals(DataType.REAL))
+                    c++;
+            }
         }
         return c;
     }
