@@ -1,7 +1,11 @@
 package instruction.generator;
 
 import instruction.InstructionGenerator;
+import instruction.generator.real.RealMathGeneratorLibrary;
+import instruction.generator.real.RealUtils;
 import instruction.instruction.AbstractInstruction;
+import instruction.instruction.AbstractInstructionFactory;
+import instruction.instruction.AbstractLabel;
 import lombok.AllArgsConstructor;
 import pl0.type.InstructionType;
 import pl0.type.OperationType;
@@ -109,6 +113,42 @@ public class ExpressionGenerator {
             };
         }
 
+        /* left child */
+        var leftTree = processRealExpression(ex.getAdvExpression().getExpression1());
+        var l1 = createInstruction(leftTree[0]);
+        var l2 = createInstruction(leftTree[1]);
+        /* right child */
+        var rightTree = processRealExpression(ex.getAdvExpression().getExpression2());
+        var r1 = createInstruction(rightTree[0]);
+        var r2 = createInstruction(rightTree[1]);
+        /* check if at least one have value */
+        if (l1 == null && r1 == null) {
+            return null;
+        }
+
+        /* get operation and check if it exists and is defined */
+        var opLabel = this.getRealOp(ex.getAdvExpression().getOp());
+        if (opLabel == null) {
+            throw new RuntimeException("Undefined real operation!");
+        }
+
+        if (l1 != null) {
+            var truePar = RealUtils.convertToFraction(l1.getPar(), l2.getPar());
+            l1.setPar(truePar[0]);
+            l2.setPar(truePar[1]);
+            gen.instructions.add(l1);
+            gen.instructions.add(l2);
+        }
+        if (r1 != null) {
+            var truePar = RealUtils.convertToFraction(r1.getPar(), r2.getPar());
+            r1.setPar(truePar[0]);
+            r2.setPar(truePar[1]);
+            gen.instructions.add(r1);
+            gen.instructions.add(r2);
+        }
+
+        gen.instructions.add(AbstractInstructionFactory.createInstruction(InstructionType.CAL, opLabel, 1));
+        gen.instructions.add(AbstractInstructionFactory.createInstruction(InstructionType.INT, -2));
         return null;
     }
 
@@ -152,6 +192,32 @@ public class ExpressionGenerator {
             case OR:
             case NOT:
                 throw new RuntimeException("Usage of not specified operation on type: integer!");
+        }
+        return null;
+    }
+
+    private AbstractLabel getRealOp(OperatorType opType) {
+        if (opType == null)
+            return null;
+        switch (opType) {
+            case MULT:
+                return gen.realMath.getOperationLabel(OperationType.MULTIPLICATION);
+            case DIVISION:
+                return gen.realMath.getOperationLabel(OperationType.DIVISION);
+            case PLUS:
+                return gen.realMath.getOperationLabel(OperationType.PLUS);
+            case MINUS:
+                return gen.realMath.getOperationLabel(OperationType.MINUS);
+            case EQV_EQV:
+            case NOT_EQV:
+            case LESS_THAN:
+            case GREATER_THAN:
+            case LESS_THAN_OR_EQV:
+            case GREATER_THAN_OR_EQV:
+            case AND:
+            case OR:
+            case NOT:
+                throw new RuntimeException("Usage of not specified operation on type: real!");
         }
         return null;
     }

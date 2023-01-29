@@ -2,6 +2,7 @@ package instruction;
 
 import instruction.generator.DeclarationGenerator;
 import instruction.generator.FunctionGenerator;
+import instruction.generator.real.RealMathGeneratorLibrary;
 import instruction.instruction.AbstractInstruction;
 import instruction.instruction.AbstractLabel;
 import instruction.instruction.IAbstractInstruction;
@@ -27,6 +28,8 @@ public class InstructionGenerator {
 
     public Map<String, AbstractLabel> labels = new HashMap<>();
     public Map<String, DeclarationPayload> declarations = new HashMap<>();
+
+    public RealMathGeneratorLibrary realMath = new RealMathGeneratorLibrary(this);
 
     @Data
     @AllArgsConstructor
@@ -61,6 +64,8 @@ public class InstructionGenerator {
         var intInstruction = AbstractInstruction.builder().instructionType(InstructionType.INT).par(initSize).level(0).build();
         instructions.add(intInstruction);
 
+        realMath.genLabels();
+
         /* process all declarations */
         for (Object o : program.getMainBody()) {
             if (o instanceof Declaration) {
@@ -90,6 +95,8 @@ public class InstructionGenerator {
                 funGen.generateFunctionInstructions((Function) o);
             }
         }
+
+        realMath.genFunctions();
 
         return instructions;
     }
