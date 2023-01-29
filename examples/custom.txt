@@ -1,4 +1,4 @@
-real a = 1.5 * 2.0;
+boolean a = true;
 
 function main()
 {

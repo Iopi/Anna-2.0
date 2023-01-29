@@ -147,7 +147,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                             // kontrola while
                             WhileCycle wc = (WhileCycle) new_sb.getCycles();
                             // kontrola expression
-                            rawExpressionControl(wc.getExp(), declarations,null);
+                            rawExpressionControl(wc.getExp(), declarations, null);
                             // kontrola statement
                             dataTypeControl(wc.getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
                             break;
@@ -224,7 +224,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
             }
             if (!correctIdent)
                 throw new RuntimeException("Variable " + expression.getIdent() + " not exists.");
-        // kontrola hodnoty expression
+            // kontrola hodnoty expression
         } else if (expression.getValue() != null) {
             if (dataType != null) { // kontrola datoveho typu
                 if (dataType != expression.getValue().getDataType()) {
@@ -252,7 +252,8 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
         // kontrola datoveho typu hodnoty s datovym typem promenne
         if (expression.getValue() != null) {
             if (dec.getDataType() != expression.getValue().getDataType())
-                throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+                if (!dec.getDataType().equals(DataType.BOOLEAN))
+                    throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
         }
         // kontrola datoveho typu prirazeni s datovym typem promenne
         else if (expression.getIdent() != null) {

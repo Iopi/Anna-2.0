@@ -43,6 +43,7 @@ public class DeclarationGenerator {
                 expGen.generateRealExpressionInstructions(d.getInitialization().getAssignment().getExpression());
                 break;
             case BOOLEAN:
+                expGen.generateBoolExpressionInstructions(d.getInitialization().getAssignment().getExpression());
                 break;
         }
 
