@@ -2,10 +2,14 @@ package instruction.generator;
 
 import instruction.InstructionGenerator;
 import instruction.instruction.AbstractInstruction;
+import instruction.instruction.AbstractInstructionFactory;
+import instruction.instruction.AbstractLabel;
 import pl0.type.InstructionType;
+import tree.Function;
 import tree.StatementBody;
 import type.DataType;
 
+import javax.xml.stream.FactoryConfigurationError;
 import java.util.Map;
 
 public class StatementBodyGenerator {
@@ -19,7 +23,8 @@ public class StatementBodyGenerator {
         this.ctx = ctx;
     }
 
-    public void generateStatementBodyInstructions(StatementBody sBody) {
+    public void generateStatementBodyInstructions(StatementBody sBody, Function function) {
+        var i = gen.instructions;
         if (sBody.getCalledFunction() != null) {
             if (sBody.getCalledFunction().equals("main"))
                 throw new RuntimeException("Cannot call main function!");
@@ -52,6 +57,23 @@ public class StatementBodyGenerator {
             var intInst = AbstractInstruction.builder().instructionType(InstructionType.INT).level(gen.currentLevel)
                     .par(-1 * usedAddresses).build();
             gen.instructions.add(intInst);
+        } else if (sBody.getConditionals() != null) {
+            var conditional = sBody.getConditionals();
+            /* if */
+            var ifCond = conditional.getIc();
+            var decGen = new DeclarationGenerator(gen, ctx);
+            /* generate condition */
+            decGen.generateExpressionInstructions(ifCond.getExp(), DataType.BOOLEAN);
+            var jmpLabel = new AbstractLabel();
+            i.add(AbstractInstructionFactory.createInstruction(InstructionType.JMC, jmpLabel));
+            /* process if body */
+            var stGen = new StatementGenerator(gen, ctx);
+            stGen.generateStatementInstructions(ifCond.getStatement(), function);
+            i.add(jmpLabel);
+            /* process else body */
+            if (conditional.getEc() != null) {
+                stGen.generateStatementInstructions(conditional.getEc().getStatement(), function);
+            }
         }
     }
 

@@ -14,6 +14,8 @@ public class FunctionGenerator {
     private final InstructionGenerator gen;
     private final Map<String, InstructionGenerator.DeclarationPayload> localCtx;
 
+    public int offset = 0;
+
     public FunctionGenerator(InstructionGenerator gen) {
         this.gen = gen;
         this.localCtx = new HashMap<>();
@@ -31,7 +33,6 @@ public class FunctionGenerator {
         var intInstruction = AbstractInstruction.builder().instructionType(InstructionType.INT).par(initSize).level(0).build();
         gen.instructions.add(intInstruction);
 
-        int offset = 0;
         /* process parameters */
         int pCount = getParameterCount(fun);
         for (Object o : fun.getFuncBody()) {
@@ -57,7 +58,7 @@ public class FunctionGenerator {
         for (Object o : fun.getFuncBody()) {
             if (o instanceof StatementBody) {
                 var sbGen = new StatementBodyGenerator(gen, localCtx);
-                sbGen.generateStatementBodyInstructions((StatementBody) o);
+                sbGen.generateStatementBodyInstructions((StatementBody) o, fun);
             }
             if (o instanceof Declaration) {
                 var d = (Declaration) o;

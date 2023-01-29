@@ -1,6 +1,14 @@
-boolean a = true;
-
 function main()
 {
-
+    boolean a = false;
+    int number = 5;
+    if(a)
+    {
+        number = 69;
+    }
+    else
+    {
+        number = 420;
+    }
 }
+

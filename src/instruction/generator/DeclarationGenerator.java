@@ -5,6 +5,7 @@ import instruction.instruction.AbstractInstruction;
 import lombok.Data;
 import pl0.type.InstructionType;
 import tree.Declaration;
+import tree.expression.Expression;
 import type.DataType;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class DeclarationGenerator {
 
         ctx = new HashMap<>();
         gen.declarations.forEach((key, value) -> ctx.putIfAbsent(key, new CurrentCtx(value.getAddress(), 1, value.getType())));
-        localDeclCtx.forEach((key, value) -> ctx.putIfAbsent(key, new CurrentCtx(value.getAddress(), 1, value.getType())));
+        localDeclCtx.forEach((key, value) -> ctx.putIfAbsent(key, new CurrentCtx(value.getAddress(), 0, value.getType())));
     }
 
     public void generateDeclarationInstructions(Declaration d, int address, int level) {
@@ -54,5 +55,20 @@ public class DeclarationGenerator {
 
         var stoInstruction = AbstractInstruction.builder().instructionType(InstructionType.STO).level(level).par(address).build();
         gen.instructions.add(stoInstruction);
+    }
+
+    public void generateExpressionInstructions(Expression ex, DataType type) {
+        var expGen = new ExpressionGenerator(gen, ctx);
+        switch (type) {
+            case INT:
+                expGen.generateIntExpressionInstructions(ex);
+                break;
+            case REAL:
+                expGen.generateRealExpressionInstructions(ex);
+                break;
+            case BOOLEAN:
+                expGen.generateBoolExpressionInstructions(ex);
+                break;
+        }
     }
 }

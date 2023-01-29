@@ -15,6 +15,7 @@ public class Function extends Symbol {
     private final List<Body> funcBody;
 
     private final HashMap<String, Symbol> symbolTable;
+    public int offset;
 
     public Function(String ident, List<Body> funcBody) {
         setIdent(ident);
