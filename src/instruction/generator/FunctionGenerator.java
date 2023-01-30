@@ -82,9 +82,7 @@ public class FunctionGenerator {
                 decGen.generateDeclarationInstructions(d, pl.getAddress(), pl.getLevel());
             }
         }
-
-
-
+        
         /* return */
         var returnInstruction = AbstractInstruction.builder().instructionType(InstructionType.RET).par(0).level(0).build();
         gen.instructions.add(returnInstruction);

@@ -1,10 +1,8 @@
 package instruction.generator;
 
 import instruction.InstructionGenerator;
-import instruction.Label;
 import instruction.generator.real.RealUtils;
 import instruction.instruction.AbstractInstruction;
-import instruction.instruction.AbstractInstructionFactory;
 import instruction.instruction.AbstractLabel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -347,6 +345,8 @@ public class ExpressionGenerator {
             i.add(lOp);
             i.add(rOp);
             i.add(createInstruction(InstructionType.OPR, op.ordinal()));
+            if (level == 0)
+                return null;
             return new BoolValuePayload(DataType.INT, null, null);
         }
         if (left.valuePayload1 != null && left.type.equals(DataType.BOOLEAN) && right.type.equals(DataType.BOOLEAN)) {
@@ -371,6 +371,8 @@ public class ExpressionGenerator {
             } else {
                 i.add(createInstruction(InstructionType.OPR, op.ordinal()));
             }
+            if (level == 0)
+                return null;
             return new BoolValuePayload(DataType.BOOLEAN, null, null);
         }
         if (left.valuePayload1 != null && left.type.equals(DataType.REAL) && right.type.equals(DataType.REAL)) {
@@ -415,6 +417,8 @@ public class ExpressionGenerator {
             i.add(r2);
             i.add(createInstruction(InstructionType.CAL, op, 1));
             i.add(createInstruction(InstructionType.INT, -1 * minus));
+            if (level == 0)
+                return null;
             return new BoolValuePayload(DataType.REAL, null, null);
         }
 

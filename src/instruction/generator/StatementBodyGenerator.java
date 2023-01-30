@@ -73,6 +73,9 @@ public class StatementBodyGenerator {
             if (conditional.getEc() != null) {
                 stGen.generateStatementInstructions(conditional.getEc().getStatement(), function);
             }
+        } else if (sBody.getCycles() != null) {
+            var cycGen = new CycleGenerator(gen, ctx);
+            cycGen.generateCycle(sBody.getCycles(), function);
         }
     }
 }
