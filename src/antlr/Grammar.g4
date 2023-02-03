@@ -68,7 +68,7 @@ CASE: 'case' ;
 repeat_cycle: REPEAT statement UNTIL LEFT_ROUND_PARENTHESIS expression RIGHT_ROUND_PARENTHESIS ;
 REPEAT: 'repeat' ;
 UNTIL: 'until' ;
-for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment expression SEMICOLON IDENTIFIER initialization RIGHT_ROUND_PARENTHESIS statement ;
+for_cycle: FOR LEFT_ROUND_PARENTHESIS multiple_assignment expression SEMICOLON initialization RIGHT_ROUND_PARENTHESIS statement ;
 FOR: 'for' ;
 
 // function call

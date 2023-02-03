@@ -126,6 +126,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                                 }
                             }
 
+                            declarations.addAll(fc.getDeclarations());
                             // kontrola promenne v hlavicce
                             rawExpressionControl(fc.getExp(), declarations, null);
 
@@ -133,7 +134,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                             Initialization new_ini = fc.getInitialization();
                             initializationControl(declarations, new_ini);
 
-                            declarations.addAll(fc.getDeclarations());
+
                             // kontrola statement
                             dataTypeControl(fc.getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
 

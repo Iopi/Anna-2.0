@@ -3,6 +3,11 @@ int limit = 5;
 
 int calc = 0;
 
-for(int i = 0; i < limit; i = i + 1) {
+function main()
+{
+
+}
+
+for(int i = 0; i < limit; i = i + 1;) {
     calc = calc + 3;
 }
