@@ -139,16 +139,20 @@ public class ExpressionGenerator {
         }
 
         if (l1 != null) {
-            var truePar = RealUtils.convertToFraction(l1.getPar(), l2.getPar());
-            l1.setPar(truePar[0]);
-            l2.setPar(truePar[1]);
+            if (leftTree[0].variable == null) {
+                var truePar = RealUtils.convertToFraction(l1.getPar(), l2.getPar());
+                l1.setPar(truePar[0]);
+                l2.setPar(truePar[1]);
+            }
             gen.instructions.add(l1);
             gen.instructions.add(l2);
         }
-        if (r1 != null) {
-            var truePar = RealUtils.convertToFraction(r1.getPar(), r2.getPar());
-            r1.setPar(truePar[0]);
-            r2.setPar(truePar[1]);
+        if (rightTree[0].variable == null && r1 != null) {
+            if (rightTree[0].variable == null) {
+                var truePar = RealUtils.convertToFraction(r1.getPar(), r2.getPar());
+                r1.setPar(truePar[0]);
+                r2.setPar(truePar[1]);
+            }
             gen.instructions.add(r1);
             gen.instructions.add(r2);
         }

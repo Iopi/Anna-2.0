@@ -5,8 +5,4 @@ function main()
     {
         value = 44;
     }
-    else
-    {
-        value = 82;
-    }
 }

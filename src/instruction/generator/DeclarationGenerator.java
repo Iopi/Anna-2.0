@@ -1,5 +1,6 @@
 package instruction.generator;
 
+import instruction.DeclarationPayload;
 import instruction.InstructionGenerator;
 import instruction.instruction.AbstractInstruction;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class DeclarationGenerator {
         private final DataType dp;
     }
 
-    public DeclarationGenerator(InstructionGenerator gen, Map<String, InstructionGenerator.DeclarationPayload> localDeclCtx) {
+    public DeclarationGenerator(InstructionGenerator gen, Map<String, DeclarationPayload> localDeclCtx) {
         this.gen = gen;
 
         ctx = new HashMap<>();
@@ -62,6 +63,21 @@ public class DeclarationGenerator {
         switch (type) {
             case INT:
                 expGen.generateBoolExpressionInstructions(ex);
+                break;
+            case REAL:
+                expGen.generateBoolExpressionInstructions(ex);
+                break;
+            case BOOLEAN:
+                expGen.generateBoolExpressionInstructions(ex);
+                break;
+        }
+    }
+
+    public void generateOnlyExpressionInstructions(Expression ex, DataType type) {
+        var expGen = new ExpressionGenerator(gen, ctx);
+        switch (type) {
+            case INT:
+                expGen.generateIntExpressionInstructions(ex);
                 break;
             case REAL:
                 expGen.generateRealExpressionInstructions(ex);

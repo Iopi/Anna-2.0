@@ -1,6 +1,8 @@
+int a = 5 * (3 + 2);
+real b = 1.5 * 2.0;
 
-int a = (1 + 5) * (1 - 8);
-int b = 5 / 4;
-
-boolean ab = 5 < 4;
-boolean bb = 8 == 8;
+function main()
+{
+    int a_mod = a - 1;
+    real b_mod = b - 1.0;
+}

@@ -1,10 +1,9 @@
-
-int limit = 5;
-int i = 0;
-
-do {
-    i = i + 1;
-
-    calc = calc + 3;
+function main()
+{
+    int mod_val = 0;
+    do
+    {
+        mod_val = mod_val + 10;
+    }
+    while(mod_val < 25)
 }
-while(i < limit);

@@ -1,3 +1,0 @@
-
-ratio a = 5/6;
-ratio b = a + (1/6);

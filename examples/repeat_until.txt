@@ -1,8 +1,9 @@
 function main()
 {
     int mod_val = 0;
-    while(mod_val < 25)
+    repeat
     {
         mod_val = mod_val + 10;
     }
+    until(mod_val > 25)
 }

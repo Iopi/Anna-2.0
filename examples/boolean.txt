@@ -1,10 +1,10 @@
+boolean a_int = (5 + 10) > (5 - 2);
+boolean b_bool = (true && false) || true;
+boolean c_real = 1.0 == 2.5;
 
-boolean a = true;
-boolean b = a;
-
-boolean c = true;
-
-int val = 5;
-if(a == c) {
-    val = 10;
+function main()
+{
+    boolean a_int_mod = a_int && false;
+    boolean b_bool_mod = b_bool && false;
+    boolean c_real_mod = c_real || true;
 }

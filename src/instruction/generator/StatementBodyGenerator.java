@@ -1,5 +1,6 @@
 package instruction.generator;
 
+import instruction.DeclarationPayload;
 import instruction.InstructionGenerator;
 import instruction.instruction.AbstractInstruction;
 import instruction.instruction.AbstractInstructionFactory;
@@ -15,9 +16,9 @@ public class StatementBodyGenerator {
 
     private final InstructionGenerator gen;
 
-    private final Map<String, InstructionGenerator.DeclarationPayload> ctx;
+    private final Map<String, DeclarationPayload> ctx;
 
-    public StatementBodyGenerator(InstructionGenerator gen, Map<String, InstructionGenerator.DeclarationPayload> ctx) {
+    public StatementBodyGenerator(InstructionGenerator gen, Map<String, DeclarationPayload> ctx) {
         this.gen = gen;
         this.ctx = ctx;
     }
@@ -68,11 +69,16 @@ public class StatementBodyGenerator {
             /* process if body */
             var stGen = new StatementGenerator(gen, ctx);
             stGen.generateStatementInstructions(ifCond.getStatement(), function);
+            var endLabel = new AbstractLabel();
+            i.add(AbstractInstructionFactory.createInstruction(InstructionType.JMP, endLabel));
             i.add(jmpLabel);
             /* process else body */
-            if (conditional.getEc() != null) {
+            if (conditional.getEc().getStatement() != null) {
                 stGen.generateStatementInstructions(conditional.getEc().getStatement(), function);
             }
+            i.add(AbstractInstructionFactory.createInstruction(InstructionType.INT, 0));
+            i.add(endLabel);
+            i.add(AbstractInstructionFactory.createInstruction(InstructionType.INT, 0));
         } else if (sBody.getCycles() != null) {
             var cycGen = new CycleGenerator(gen, ctx);
             cycGen.generateCycle(sBody.getCycles(), function);

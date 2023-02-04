@@ -2,6 +2,7 @@ import antlr.GrammarLexer;
 import antlr.GrammarParser;
 
 import instruction.InstructionGenerator;
+import instruction.instruction.AbstractInstruction;
 import tree.Program;
 import visitor.GrammarVisitor;
 import org.antlr.v4.runtime.CharStreams;
@@ -13,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Main {
@@ -26,29 +29,29 @@ public class Main {
             lexer = new GrammarLexer(CharStreams.fromFileName(args[0]));
 //            lexer = new GrammarLexer(CharStreams.fromString(javaClassContent));
         } catch (IOException e) {
-
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
-        assert lexer != null;
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GrammarParser parser = new GrammarParser(tokens);
         ParseTree tree = parser.program();
 
         Program program = new GrammarVisitor().visit(tree);
-        InstructionGenerator insGenerator = new InstructionGenerator(program);
-        var abstractInstructions = insGenerator.generateAbstractInstructions();
-        var instructions = insGenerator.generateConcreteInstructions(abstractInstructions);
-        for (var i : instructions) {
-            System.out.println(i);
+        try {
+            InstructionGenerator insGenerator = new InstructionGenerator(program);
+            var instructions = insGenerator.generateInstructions();
+            instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructions);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
-
-        // instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructionList);
     }
 
-    private static void instructionToOutput(String fileName, ArrayList<String> instructions) {
+    private static void instructionToOutput(String fileName, List<AbstractInstruction> instructions) {
         try (PrintWriter out = new PrintWriter(fileName)) {
-            for (String instruction : instructions) {
-                out.println(instruction);
+            for (var instruction : instructions) {
+                out.println(instruction.toString());
             }
 //            out.println(instructions);
         } catch (FileNotFoundException e) {

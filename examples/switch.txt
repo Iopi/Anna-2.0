@@ -1,15 +1,17 @@
-
-int target = 2;
-int val = 5;
-
-switch(target) {
-    case 0:
-        val = 0;
-        break;
-    case 1:
-        val = 1;
-        break;
-    case 2:
-        val = 2;
-        break;
+function main()
+{
+    int mod_val = 4;
+    int value;
+    switch(mod_val)
+    {
+        case 2:
+            value = 2;
+            break;
+        case 3:
+            value = 3;
+            break;
+        case 4:
+            value = 50;
+            break;
+    }
 }

@@ -1,0 +1,6 @@
+const int VAL = 5;
+
+function main()
+{
+    VAL = 420;
+}

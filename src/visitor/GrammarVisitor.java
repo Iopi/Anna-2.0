@@ -107,7 +107,7 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                     dataTypeControl(new_sb.getConditionals().getIc().getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
 
                     // kontrola vetve else
-                    if (new_sb.getConditionals().getEc() != null) {
+                    if (new_sb.getConditionals().getEc().getStatement() != null) {
                         dataTypeControl(new_sb.getConditionals().getEc().getStatement().getStatementBody(), new ArrayList<>(declarations), new ArrayList<>(functions));
                     }
                 }
@@ -263,7 +263,8 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                 if (dec2.getIdent().equals(expression.getIdent())) {
                     correctIdent = true;
                     if (dec.getDataType() != dec2.getDataType())
-                        throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+                        if (dec.getDataType() != DataType.BOOLEAN)
+                            throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
                     break;
                 }
             }

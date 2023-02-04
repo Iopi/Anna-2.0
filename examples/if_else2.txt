@@ -1,7 +1,7 @@
 function main()
 {
     int value = 5;
-    if(value < 1)
+    if(value > 1)
     {
         value = 44;
     }

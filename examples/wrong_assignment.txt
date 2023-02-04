@@ -1,4 +1,0 @@
-
-int a = 4;
-boolean b = true;
-int c = b;

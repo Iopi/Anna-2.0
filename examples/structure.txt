@@ -1,0 +1,23 @@
+int num1 = 2;
+int num2 = 5;
+
+function fun_c(boolean x)
+{
+    boolean cpy = x;
+}
+
+function fun_b(int v1, int v2)
+{
+    boolean val = (v1 >= v2);
+    fun_c(val);
+}
+
+function fun_a()
+{
+    fun_b(num1, num2);
+}
+
+function main()
+{
+    fun_a();
+}

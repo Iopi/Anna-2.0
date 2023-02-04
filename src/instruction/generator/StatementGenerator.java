@@ -1,5 +1,6 @@
 package instruction.generator;
 
+import instruction.DeclarationPayload;
 import instruction.InstructionGenerator;
 import tree.*;
 
@@ -9,12 +10,12 @@ import java.util.Map;
 public class StatementGenerator {
 
     private final InstructionGenerator gen;
-    private final Map<String, InstructionGenerator.DeclarationPayload> localCtx;
+    private final Map<String, DeclarationPayload> localCtx;
 
-    public StatementGenerator(InstructionGenerator gen, Map<String, InstructionGenerator.DeclarationPayload> ctx) {
+    public StatementGenerator(InstructionGenerator gen, Map<String, DeclarationPayload> ctx) {
         this.gen = gen;
         this.localCtx = new HashMap<>();
-        ctx.forEach((k, v) -> localCtx.putIfAbsent(k, new InstructionGenerator.DeclarationPayload(
+        ctx.forEach((k, v) -> localCtx.putIfAbsent(k, new DeclarationPayload(
                 v.getAddress(), v.getType(), v.isConstant(), v.isParameter(), v.getLevel()
         )));
     }
@@ -29,9 +30,9 @@ public class StatementGenerator {
                 var sbGen = new StatementBodyGenerator(gen, localCtx);
                 sbGen.generateStatementBodyInstructions((StatementBody) o, function);
             }
-            if (o instanceof Declaration) {
+            if (o instanceof Declaration && !((Declaration) o).isParameter()) {
                 var d = (Declaration) o;
-                localCtx.putIfAbsent(d.getIdent(), new InstructionGenerator.DeclarationPayload(
+                localCtx.putIfAbsent(d.getIdent(), new DeclarationPayload(
                         gen.declBase + (function.offset++), d.getDataType(), d.isConstant(), d.isParameter(), 0
                 ));
                 var decGen = new DeclarationGenerator(gen, localCtx);
