@@ -1,6 +1,5 @@
 package tree;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import type.DataType;
@@ -8,7 +7,6 @@ import type.DataType;
 @Getter
 public class Declaration extends Symbol {
 
-//    private Variable variable;
     private final DataType dataType;
 
     private final boolean isConstant;
@@ -23,6 +21,7 @@ public class Declaration extends Symbol {
         this.isConstant = isConstant;
         this.initialization = initialization;
     }
+
     public Declaration(String ident, DataType dataType, boolean isConstant, Initialization initialization, boolean isParameter) {
         setIdent(ident);
         this.dataType = dataType;

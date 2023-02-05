@@ -6,7 +6,7 @@ program: (main)* ;
 // main
 main: declaration | initialization | statement_body | function ;
 
-// deklarace, nasobne prirazeni, paralelni prirazeni
+// declaration, single, parallel and multiple assignment
 declaration: single_declaration | multiple_assignment | parallel_assignment ;
 // int a;
 single_declaration: type IDENTIFIER SEMICOLON;
@@ -84,8 +84,6 @@ real: INT DOT INT ;
 ratio: INT DIVISION INT ;
 BOOLEAN: 'true' | 'false' ;
 STRING: '"'[a-zA-Z0-9]*'"' ;
-//array_type: ARRAY LESS_THAN type_no_array GREATER_THAN ;
-//ARRAY: 'array' ;
 
 // math
 MINUS: '-' ;

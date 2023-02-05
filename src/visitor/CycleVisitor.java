@@ -12,8 +12,16 @@ import type.DataType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Visitor for Cycle
+ */
 public class CycleVisitor extends GrammarBaseVisitor<Cycle> {
 
+    /**
+     * Visit method for Cycle
+     * @param ctx context for Cycle
+     * @return Cycle object
+     */
     @Override
     public Cycle visitCycle(GrammarParser.CycleContext ctx) {
         if (ctx.while_cycle() != null) {

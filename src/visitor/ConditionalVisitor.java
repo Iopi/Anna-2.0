@@ -7,9 +7,16 @@ import tree.condition.Conditional;
 import tree.condition.ElseCond;
 import tree.condition.IfCond;
 import tree.expression.Expression;
-
+/**
+ * Visitor for Conditional
+ */
 public class ConditionalVisitor extends GrammarBaseVisitor<Conditional> {
 
+    /**
+     * Visit method for Conditional
+     * @param ctx context for Conditional
+     * @return Conditional object
+     */
     @Override
     public Conditional visitConditional(GrammarParser.ConditionalContext ctx) {
         Expression exp = new ExpressionVisitor().visit(ctx.if_part().expression());

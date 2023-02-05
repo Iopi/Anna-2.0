@@ -7,8 +7,16 @@ import tree.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Visitor for Statement
+ */
 public class StatementVisitor extends GrammarBaseVisitor<Statement> {
 
+    /**
+     * Visit method for Statement
+     * @param ctx context for Statement
+     * @return Statement object
+     */
     @Override
     public Statement visitStatement(GrammarParser.StatementContext ctx) {
         List<Body> statementBody = new ArrayList<>();

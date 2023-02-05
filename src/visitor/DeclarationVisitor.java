@@ -11,8 +11,16 @@ import java.util.List;
 
 import static visitor.ExpressionVisitor.getValue;
 
+/**
+ * Visitor for Declaration
+ */
 public class DeclarationVisitor extends GrammarBaseVisitor<List<Declaration>> {
 
+    /**
+     * Visit method for Declaration
+     * @param ctx context for Declaration
+     * @return Declaration list
+     */
     @Override
     public List<Declaration> visitDeclaration(GrammarParser.DeclarationContext ctx) {
         List<Declaration> declarations = new ArrayList<>();

@@ -7,7 +7,6 @@ import type.DataType;
 @Getter
 @Setter
 public abstract class Value {
-
     private DataType dataType;
     private Object value;
 }

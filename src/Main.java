@@ -13,8 +13,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -22,12 +20,9 @@ public class Main {
     public static void main(String[] args) {
         checkArguments(args);
 
-//        String javaClassContent = "int cislo = 5 ;";
-
         GrammarLexer lexer = null;
         try {
             lexer = new GrammarLexer(CharStreams.fromFileName(args[0]));
-//            lexer = new GrammarLexer(CharStreams.fromString(javaClassContent));
         } catch (IOException e) {
             System.err.println(e.getMessage());
             System.exit(1);
@@ -53,7 +48,6 @@ public class Main {
             for (var instruction : instructions) {
                 out.println(instruction.toString());
             }
-//            out.println(instructions);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

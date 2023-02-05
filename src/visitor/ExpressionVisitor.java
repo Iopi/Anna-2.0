@@ -8,8 +8,16 @@ import tree.value.*;
 import type.DataType;
 import type.OperatorType;
 
-
+/**
+ * Visitor for Expression
+ */
 public class ExpressionVisitor extends GrammarBaseVisitor<Expression> {
+
+    /**
+     * Visit method for Expression
+     * @param ctx context for Expression
+     * @return Expression object
+     */
     @Override
     public Expression visitExpression(GrammarParser.ExpressionContext ctx) {
         Value value = null;

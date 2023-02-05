@@ -5,23 +5,17 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Root object Program
+ */
 @Getter
 public class Program {
 
-    private List<Body> mainBody;
+    private final List<Body> mainBody;
 
+    // global table of symbols
     private final HashMap<String, Symbol> symbolTable;
-//    private final List<Initialization> initializations;
-//    private final List<StatementBody> statementBodies;
 
-//    public Program(List<Declaration> declarations, List<Function> functions, List<Initialization> initializations,
-//                   List<StatementBody> statementBodies) {
-//        this.symbolTable = new HashMap<>();
-//        for (Symbol symbol : declarations) symbolTable.put(symbol.getIdent(), symbol);
-//        for (Symbol symbol : functions) symbolTable.put(symbol.getIdent(), symbol);
-//        this.initializations = initializations;
-//        this.statementBodies = statementBodies;
-//    }
     public Program(List<Body> mainBody) {
         this.symbolTable = new HashMap<>();
         for (Body member: mainBody) {
@@ -31,9 +25,6 @@ public class Program {
             }
         }
         this.mainBody = mainBody;
-//        for (Symbol symbol : declarations) symbolTable.put(symbol.getIdent(), symbol);
-//        for (Symbol symbol : functions) symbolTable.put(symbol.getIdent(), symbol);
-//        this.initializations = initializations;
-//        this.statementBodies = statementBodies;
+
     }
 }
