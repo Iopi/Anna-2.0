@@ -78,7 +78,11 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
                 }
                 // control of data type and expression
                 if (newDec.getInitialization() != null) {
-                    expressionControl(newDec.getInitialization().getAssignment().getExpression(), newDec, declarations);
+                    DataType dt = expressionControl(newDec.getInitialization().getAssignment().getExpression(),
+                            null, declarations, newDec.getIdent());
+                    if (newDec.getDataType() != dt)
+                        throw new RuntimeException("Variable " + newDec.getIdent() + " has wrong data type of value.");
+
                 }
                 declarations.add(newDec);
             }
@@ -256,39 +260,48 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
         return dataType;
     }
 
-    private void expressionControl(Expression expression, Declaration dec, List<Declaration> declarations) {
+    private DataType expressionControl(Expression expression, DataType dt, List<Declaration> declarations, String ident) {
         // control of data type of value with data type of variable
         if (expression.getValue() != null) {
-            if (dec.getDataType() != expression.getValue().getDataType())
-                if (!dec.getDataType().equals(DataType.BOOLEAN))
-                    throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+            if (dt != null)
+                if (dt != expression.getValue().getDataType())
+                    throw new RuntimeException("Data type " + dt + " and " + expression.getValue().getDataType() +
+                            " are not same. (Initialize variable " + ident + ")");
+
+            return expression.getValue().getDataType();
         }
         // control of data type of assignment with data type of variable
         else if (expression.getIdent() != null) {
-            boolean correctIdent = false;
             for (Declaration dec2 : declarations) {
                 if (dec2.getIdent().equals(expression.getIdent())) {
-                    correctIdent = true;
-                    if (dec.getDataType() != dec2.getDataType())
-                        if (dec.getDataType() != DataType.BOOLEAN)
-                            throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
-                    break;
+                    if (dt != null)
+                        if (dt != dec2.getDataType())
+                            throw new RuntimeException("Data type " + dt + " and data type of" + dec2.getIdent() +
+                                    " (" + dec2.getDataType() + ") are not same. (Initialize variable " + ident + ")");
+                    return dec2.getDataType();
                 }
             }
-            if (!correctIdent)
-                throw new RuntimeException("Variable " + expression.getIdent() + " not exists.");
+            throw new RuntimeException("Variable " + expression.getIdent() + " not exists.");
+
         }
         // control of advanced expression
         else {
             AdvExpression exp = expression.getAdvExpression();
             if (exp.getClass().equals(ExpParanthesis.class)) {
-                expressionControl(exp.getExpression1(), dec, declarations);
-
+                return expressionControl(exp.getExpression1(), null, declarations, ident);
             }
             // other advanced expression has alwaystwo expressions
             else {
-                expressionControl(exp.getExpression1(), dec, declarations);
-                expressionControl(exp.getExpression2(), dec, declarations);
+                DataType dataType1 = expressionControl(exp.getExpression1(), null, declarations, ident);
+                DataType dataType2 = expressionControl(exp.getExpression2(), dataType1, declarations, ident);
+                if (dataType1 != dataType2)
+                    throw new RuntimeException("Data type " + dataType1 + " and " + dataType2 +
+                            " are not same. (Initialize variable " + ident + ")");
+                if (exp.getClass().equals(ExpNot.class) || exp.getClass().equals(ExpEqv.class) ||
+                        exp.getClass().equals(ExpAndOr.class)) {
+                    return DataType.BOOLEAN;
+                }
+                return dataType1;
             }
         }
     }
@@ -313,7 +326,11 @@ public class GrammarVisitor extends GrammarBaseVisitor<Program> {
             // control of existence variable
             if (dec.getIdent().equals(new_ini.getName())) {
                 correctIdent = true;
-                expressionControl(new_ini.getAssignment().getExpression(), dec, declarations);
+                DataType dt = expressionControl(new_ini.getAssignment().getExpression(), null, declarations,
+                        new_ini.getName());
+                if (dec.getDataType() != dt)
+                    throw new RuntimeException("Variable " + dec.getIdent() + " has wrong data type of value.");
+
             }
         }
         if (!correctIdent)
