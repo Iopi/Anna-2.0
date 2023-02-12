@@ -62,11 +62,7 @@ public class DeclarationGenerator {
         var expGen = new ExpressionGenerator(gen, ctx);
         switch (type) {
             case INT:
-                expGen.generateBoolExpressionInstructions(ex);
-                break;
             case REAL:
-                expGen.generateBoolExpressionInstructions(ex);
-                break;
             case BOOLEAN:
                 expGen.generateBoolExpressionInstructions(ex);
                 break;

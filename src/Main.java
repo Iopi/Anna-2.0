@@ -31,9 +31,8 @@ public class Main {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GrammarParser parser = new GrammarParser(tokens);
         ParseTree tree = parser.program();
-
-        Program program = new GrammarVisitor().visit(tree);
         try {
+            Program program = new GrammarVisitor().visit(tree);
             InstructionGenerator insGenerator = new InstructionGenerator(program);
             var instructions = insGenerator.generateInstructions();
             instructionToOutput(args[1] + "/ins_" + new File(args[0]).getName(), instructions);

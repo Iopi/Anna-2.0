@@ -1,0 +1,6 @@
+function main()
+{
+    boolean b = 1 > (4 + 6);
+    boolean c = (4 + 6) > 1;
+    boolean d = (4 + 8) > (4 + 9);
+}

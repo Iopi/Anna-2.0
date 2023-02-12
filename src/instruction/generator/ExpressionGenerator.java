@@ -184,10 +184,42 @@ public class ExpressionGenerator {
                 switch (res.type) {
                     case INT:
                         var op = getIntBoolOp(ex.getAdvExpression().getOp());
+                        if (res.skewedToLeft) {
+                            switch (op) {
+                                case GREATER:
+                                    op = OperationType.LESSER;
+                                    break;
+                                case GREATER_OR_EQUAL:
+                                    op = OperationType.LESSER_OR_EQUAL;
+                                    break;
+                                case LESSER:
+                                    op = OperationType.GREATER;
+                                    break;
+                                case LESSER_OR_EQUAL:
+                                    op = OperationType.GREATER_OR_EQUAL;
+                                    break;
+                            }
+                        }
                         gen.instructions.add(createInstruction(InstructionType.OPR, op.ordinal()));
                         break;
                     case REAL:
-                        var opLabel = getRealBoolOp(ex.getAdvExpression().getOp());
+                        OperatorType cT = ex.getAdvExpression().getOp();
+                        if (res.skewedToLeft) {
+                            switch (ex.getAdvExpression().getOp()) {
+                                case GREATER_THAN:
+                                    cT = OperatorType.LESS_THAN;
+                                    break;
+                                case GREATER_THAN_OR_EQV:
+                                    cT = OperatorType.LESS_THAN_OR_EQV;
+                                    break;
+                                case LESS_THAN:
+                                    cT = OperatorType.GREATER_THAN;
+                                    break;
+                                case LESS_THAN_OR_EQV:
+                                    cT = OperatorType.GREATER_THAN_OR_EQV;
+                            }
+                        }
+                        var opLabel = getRealBoolOp(cT);
                         gen.instructions.add(createInstruction(InstructionType.CAL, opLabel, 1));
                         break;
                     case BOOLEAN:
@@ -325,7 +357,9 @@ public class ExpressionGenerator {
                     i.add(r2);
                     break;
             }
-            return new BoolValuePayload(left.type, null, null);
+            var retVal = new BoolValuePayload(left.type, null, null);
+            retVal.skewedToLeft = true;
+            return retVal;
         }
         if (left.valuePayload1 != null && left.type.equals(DataType.INT) && right.type.equals(DataType.INT)) {
             var lOp = createInstructionFromPayload(left.valuePayload1);
@@ -589,10 +623,18 @@ public class ExpressionGenerator {
         int offset;
     }
 
-    @AllArgsConstructor
+
     private static class BoolValuePayload {
         DataType type;
         ValuePayload valuePayload1;
         ValuePayload valuePayload2;
+
+        public BoolValuePayload(DataType type, ValuePayload valuePayload1, ValuePayload valuePayload2) {
+            this.type = type;
+            this.valuePayload1 = valuePayload1;
+            this.valuePayload2 = valuePayload2;
+        }
+
+        boolean skewedToLeft = false;
     }
 }
