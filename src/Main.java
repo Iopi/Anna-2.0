@@ -18,7 +18,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        checkArguments(args);
+        try {
+            checkArguments(args);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
 
         GrammarLexer lexer = null;
         try {
@@ -54,7 +59,9 @@ public class Main {
 
     private static void checkArguments(String[] args) {
         if (args.length != 2) {
-            throw new IllegalArgumentException("Invalid counts of arguments.");
+            throw new IllegalArgumentException("Invalid counts of arguments. " +
+                    "Application should contain exactly 2 arguments: path to the file with source code " +
+                    "and path to the directory where PL/0 instruction file should be saved! ");
         }
 
         if (!new File(args[0]).isFile()) {
